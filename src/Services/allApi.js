@@ -8,3 +8,11 @@ export const userRegisterApi=async(reqBody)=>{
 export const userLoginApi=async(reqBody)=>{
     return await commenApi("POST",`${serverURL}/login-user`,reqBody)
 }
+
+export const adminRegisterApi=async(reqBody)=>{
+    return await commenApi("POST",`${serverURL}/admin-register`,reqBody)
+}
+
+export const adminLoginApi=async(reqBody)=>{
+    return await commenApi("POST",`${serverURL}/admin-login`,reqBody)
+}

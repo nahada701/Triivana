@@ -94,7 +94,7 @@ setIsLogedin(true)
 
       if(result.status==200){
         sessionStorage.setItem("user",JSON.stringify(result.data.user))
-        sessionStorage.setItem("token",result.data.token)
+        sessionStorage.setItem("userToken",result.data.token)
         setIsLogedin(true)
         handleClose()
 

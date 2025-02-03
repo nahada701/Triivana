@@ -1,12 +1,69 @@
 import React, { useState } from 'react'
-import UserNavbar from '../../components/User/UserNavbar'
-import hotelimage from '../../assets/luxury-beach-house-with-glass-windows-beautiful-scenery-sea_181624-9041.jpg'
 import logo from '../../assets/logoT.png'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-function AdminLogin() {
+import { adminLoginApi, adminRegisterApi } from '../../Services/allApi';
+import { toast } from 'react-toastify';
+import {  useNavigate } from 'react-router-dom';
 
+function AdminLogin() {
   const[isSignedup,setIsSignedup]=useState(false)
+  const[adminDetails,setAdminDetails]=useState({firstname:"",lastname:"",email:"",password:""})
+console.log(adminDetails);
+const navigate= useNavigate()
+
+  const handleregister=async()=>{
+    const{firstname,lastname,email,password}=adminDetails
+    if(firstname&&lastname&&email&&password){
+      const reqBody={firstname,lastname,email,password}
+
+      try{
+        const result=await adminRegisterApi(reqBody)
+        console.log(result);
+        if(result.status==200){
+          setIsSignedup(true)
+          setAdminDetails({firstname:"",lastname:"",email:"",password:""})
+        }
+        else if(result.status==406){
+          toast.error(result.response.data)
+        }
+        
+      }
+      catch(err){
+        console.log(err);
+        
+      }
+    }
+    else{
+      toast.warning("please enter all fields")
+    }
+  }
+  const handleLogin=async()=>{
+    const{email,password}=adminDetails
+    if(email&& password){
+      try {
+        const result=await adminLoginApi({email,password})
+        if(result.status==200){
+          sessionStorage.setItem("adminToken",result.data.token)
+          sessionStorage.setItem("admin",JSON.stringify(result.data.admin))
+          setAdminDetails({firstname:"",lastname:"",email:"",password:""})
+          navigate('/dashboard/manage-listings')
+        }
+        else if(result.status==404){
+          toast.error(result.response.data)
+        }
+        
+
+      } catch (error) {
+        console.log(error);
+        
+      }
+
+    }
+    else{
+      toast.warning("please enter both fields")
+    }
+  }
 
   return (
     <div className=''>
@@ -29,7 +86,7 @@ function AdminLogin() {
   
   
         >
-          <Form.Control  type="text" placeholder="First name" />
+          <Form.Control value={adminDetails.firstname} onChange={(e)=>setAdminDetails({...adminDetails,firstname:e.target.value})}  type="text" placeholder="First name" />
         </FloatingLabel>
                 </div>
       <div className='col-lg-6 '>
@@ -40,7 +97,7 @@ function AdminLogin() {
   
   
         >
-          <Form.Control  type="text" placeholder="Lsst name" />
+          <Form.Control value={adminDetails.lastname}  onChange={(e)=>setAdminDetails({...adminDetails,lastname:e.target.value})}  type="text" placeholder="Lsst name" />
         </FloatingLabel>
       </div>
                   </div>}
@@ -51,17 +108,17 @@ function AdminLogin() {
 
 
       >
-        <Form.Control  type="email" placeholder="name@example.com" />
+        <Form.Control value={adminDetails.email}  onChange={(e)=>setAdminDetails({...adminDetails,email:e.target.value})}  type="email" placeholder="name@example.com" />
       </FloatingLabel>
       <FloatingLabel controlId="floatingPassword1" label="Password"  className="mb-3">
-        <Form.Control  type="password" placeholder="Password" />
+        <Form.Control  value={adminDetails.password} onChange={(e)=>setAdminDetails({...adminDetails,password:e.target.value})}   type="password" placeholder="Password" />
       </FloatingLabel>
     
  {isSignedup?<div className='d-flex align-items-center justify-content-center mt-4 w-100'>
-  <button  style={{height:"50px",border:"3px white solid"}} className='w-100 black-btn px-4 '>Log in</button>
+  <button   onClick={handleLogin} style={{height:"50px",border:"3px white solid"}} className='w-100 black-btn px-4 '>Log in</button>
   </div>
  :<div className='d-flex align-items-center justify-content-center mt-4 w-100'>
-  <button   style={{height:"50px",border:"3px white solid"}}  className='w-100 black-btn px-4 '>Sign up </button>
+  <button onClick={handleregister}  style={{height:"50px",border:"3px white solid"}}  className='w-100 black-btn px-4 '>Sign up </button>
   </div>}
 
   
