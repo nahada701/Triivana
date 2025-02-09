@@ -21,15 +21,27 @@ const [username,setUsername]=useState("")
   
 
   const [isLogedin,setIsLogedin]=useState(false)
-  console.log(isLogedin);
+
+  const[isAdminLogedin,setIsAdminLogedin]=useState()
+  
   
 useEffect(() => {
 if(sessionStorage.getItem("user")){
 setUsername(JSON.parse(sessionStorage.getItem("user")).email)
 setIsLogedin(true)
 
+
+
 }
 }, [])
+
+useEffect(() => {
+  if(sessionStorage.getItem("adminToken")){
+   setIsAdminLogedin(sessionStorage.getItem("adminToken"))
+    
+  }
+}, [])
+
 
 
   const handleToggle = () => {
@@ -147,7 +159,7 @@ setIsLogedin(true)
               </button>
 {/* Propert listing link */}
               
-               <Link to={'/admin-login'} >
+               <Link to={isAdminLogedin?'/dashboard':'/partner-register'} >
                   <button className="btn text-light">
                   List Your Property
                   </button>

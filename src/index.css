@@ -30,6 +30,15 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
 }
+.black-btn2{
+  border-radius: 3px;
+  border: none;
+  color: rgb(249, 249, 249);
+  background-color: black;
+  font-size: 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .white-btn:hover{
   border-radius: 3px;
   border: none;

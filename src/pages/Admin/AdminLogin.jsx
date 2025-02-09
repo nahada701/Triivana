@@ -76,7 +76,7 @@ const navigate= useNavigate()
                 pt-4 bg-color " >
                   {isSignedup?
                     <h2 className='text-light py-2'>LOG IN TO YOUR ACCOUNT</h2>
-                  :<h2 className='text-light py-2'>CREATE AN ACCOUNT</h2>}
+                  :<h2 className='text-light py-2'>CREATE YOUR PARTNER ACCOUNT</h2>}
                  {!isSignedup && <div className="row">
                 <div className='col-lg-6 pe-lg-0 '>
                     <FloatingLabel

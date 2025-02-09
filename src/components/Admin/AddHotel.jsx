@@ -1,60 +1,230 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import { addHotelApi, addRoomsApi } from '../../Services/allApi';
+import { toast } from 'react-toastify';
+import { addResponseContext } from '../../context/ContextApi';
+
 function AddHotel() {
+
+    const{addResponse,setAddResponse}=useContext(addResponseContext)
+
   const [step, setStep] = useState(1);
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
   
-    //state to store files 
-
-    const[images,setImages]=useState([])
-console.log(images);
-
 //hotel data
 
 const[hotelData,setHotelData]=useState({
   propertyname:"",
-  propertyType:"",
+  propertytype:"",
   phone:"",
   email:"",
+  checkin:"",
+  checkout:"",
   address:"",
   description:"",
   amenities:[],
   images:[]
 })
+console.log("hotel",hotelData);
 
-console.log(hotelData);
+const [hotelId,setHotelId]=useState("")
 
-const handleImageUpload = (e, type) => {
+console.log(hotelId);
+
+
+const [roomData,setRoomData]=useState( [{
+  roomType: '',
+  numberOfRooms: '', 
+  pricePerNight: '',
+  description:"",
+  amenities: [], 
+  images: [] }])
+console.log("room",roomData);
+
+
+const handleImageUploadHotel = (e) => {
   const selectedImages = Array.from(e.target.files);
-  if (type === 'hotel') {
+ 
       setHotelData({ ...hotelData, images: [...hotelData.images, ...selectedImages] });
-  } 
-  // else {
-  //     setRoomData({ ...roomData, images: [...roomData.images, ...selectedImages] });
-  // }
+  
+
 };
-const handleAmenitiesChange=(e)=>{
-  const{checked,value}=e.target
-  if(checked){
-    setHotelData({...hotelData,amenities:[...hotelData.amenities,value]})
-  }
-  else{
-    setHotelData({...hotelData,amenities:hotelData.amenities.filter(amenity=>amenity!==value)})
-  }
-}
+const handleImageUploadRoom = (index, e) => {
+  const selectedImages = Array.from(e.target.files);
+  const updatedRooms = [...roomData];
 
-    const handleRemoveImageHotel=(index)=>{
+  // Append new images to the existing images array
+  updatedRooms[index].images = [...updatedRooms[index].images, ...selectedImages];
 
-    setHotelData({...hotelData,images:hotelData.images.filter((_,i)=>i!==index)})
+  setRoomData(updatedRooms);
+};
+const handleRemoveImageHotel=(index)=>{
+
+  setHotelData({...hotelData,images:hotelData.images.filter((_,i)=>i!==index)})
   
 
     }
+
+  const  handleRemoveImageRoom=(index,imgIndex)=>{
+    const updatingRoom=[...roomData]
+    updatingRoom[index].images=updatingRoom[index].images.filter((_,i)=>i!==imgIndex)
+
+    setRoomData(updatingRoom)
+  }
+
+const  handleNextClick=async()=>{
+const  {propertyname,propertytype,phone,email,address,description,checkin,checkout,amenities,images}=hotelData
+if(propertyname&&propertytype&&phone&&email&&address&&description&&images){  // 
+
+  const reqBody=new FormData()
+  reqBody.append("propertyname",propertyname)
+  reqBody.append("propertytype",propertytype)
+  reqBody.append("phone",phone)
+  reqBody.append("email",email)
+  reqBody.append("address",address)
+  reqBody.append("description",description)
+  reqBody.append("checkin",checkin)
+  reqBody.append("checkout",checkout)
+
+  amenities.forEach(amenity=>reqBody.append("amenities",amenity))
+  images.forEach(image=>reqBody.append("images",image))
+
+  const adminToken=sessionStorage.getItem("adminToken")
+  if(adminToken){ 
+    const reqHeader={
+      "Authorization":`Bearer ${adminToken}`,
+      "Content-Type":"multipart/form-data"
+
+  }
+  try{
+    const result=await addHotelApi(reqBody,reqHeader)
+    console.log(result);
+    if(result.status==200){
+      console.log(result.data);
+  
+      setHotelId(result.data._id);
+  
+    
+      setStep(2)
+    }
+    else if(result.status==406){
+      toast.warn("hotel already added")
+    }
+    
+  }catch(err){
+    console.log(err);
+    
+  }
+}
+  else{
+    console.log("Cannot get admin token");
+    
+  }
+
+ 
+
+}else{
+  toast.warning("please fill all the data required")
+}
+
+}
+
+//
+const addRoomType = () => {
+  setRoomData([...roomData, { roomType: '', numberOfRooms: '', pricePerNight: '', amenities: [], images: [] }]);
+};
+
+const handleAmenitiesChange = (index, amenity,type) => {
+ if(type=="room"){ const updatedRooms = [...roomData];
+  const roomAmenities = updatedRooms[index].amenities || [];
+  if (roomAmenities.includes(amenity)) {
+      // Remove amenity if already selected
+      updatedRooms[index].amenities = roomAmenities.filter(item => item !== amenity);
+  } else {
+      // Add amenity if not already selected
+      updatedRooms[index].amenities = [...roomAmenities, amenity];
+  }
+  setRoomData(updatedRooms);}
+
+  else if(type=="hotel"){
+    if(hotelData.amenities.includes(amenity)){
+      setHotelData({...hotelData,amenities:hotelData.amenities.filter(ame=>ame!==amenity)})
+     
+    }
+    else{
+      setHotelData({...hotelData,amenities:[...hotelData.amenities,amenity]})
+    }
+  }
+};
+
+
+const removeRoomType = (index) => {
+  setRoomData(roomData.filter((_, i) => i !== index));
+};
+
+const handleRoomDataChange=(index,field,e)=>{
+  const updatedRoom=[...roomData]
+  updatedRoom[index][field]=e.target.value
+  setRoomData(updatedRoom)
+}
+
+const handleSubmitForm = async () => {
+  // Check for missing room data
+  for (const room of roomData) {
+    if (!room.roomType || !room.numberOfRooms || !room.pricePerNight) {
+      toast.warning("Please fill all the room details before submitting.");
+      return;
+    }
+  }
+
+  try {
+    const adminToken = sessionStorage.getItem("adminToken");
+    if (!adminToken) {
+      console.log("Cannot get admin token");
+      return;
+    }
+
+    const reqHeader = {
+      Authorization: `Bearer ${adminToken}`,
+      "Content-Type": "multipart/form-data",
+    };
+
+    // Create an array of API call promises
+    const roomRequests = roomData.map(async (room) => {
+      const reqBody = new FormData();
+      reqBody.append("hotelId", hotelId);
+      reqBody.append("roomType", room.roomType);
+      reqBody.append("numberOfRooms", room.numberOfRooms);
+      reqBody.append("pricePerNight", room.pricePerNight);
+      reqBody.append("description", room.description);
+      room.amenities.forEach((amenity) => reqBody.append("amenities", amenity));
+      room.images.forEach((image) => reqBody.append("images", image));
+
+      return await addRoomsApi(reqBody, reqHeader);
+    });
+
+    // Wait for all API calls to complete
+    const results = await Promise.all(roomRequests);
+    console.log("API responses:", results);
+    if(results.map(result=>result.status==200)){
+      toast.success("Rooms added successfully!");
+      setShow(false); 
+      setStep(1)
+      setAddResponse(results)
+      
+    }
+   
+  } catch (err) {
+    console.log(err);
+    toast.error("Error adding rooms");
+  }
+};
 
   return (
     <div>
@@ -86,12 +256,14 @@ const handleAmenitiesChange=(e)=>{
             
           </div>
         <div className='col-lg-6'>
-              <Form.Select onChange={(e)=>setHotelData({...hotelData,propertyType:e.target.value})} className='mb-3' style={{height:"58px"}} aria-label="Default select example">
+              <Form.Select onChange={(e)=>setHotelData({...hotelData,propertytype:e.target.value})} className='mb-3' style={{height:"58px"}} aria-label="Default select example">
           <option>Property type</option>
+          <option value="Hotel">Hotel</option>
           <option value="Villa">Villa</option>
           <option value="Apartment">Apartment</option>
           <option value="Resort">Resort</option>
           <option value="Cottage">Cottage</option>
+
 
         </Form.Select>
         </div>
@@ -128,56 +300,38 @@ const handleAmenitiesChange=(e)=>{
             <Form.Control onChange={(e)=>setHotelData({...hotelData,description:e.target.value})} placeholder='Description' as="textarea" rows={3} />
           </Form.Group>
       </div>
+      <div className="col-lg-6">   <FloatingLabel
+                controlId="floatingInput4"
+                label="Check in"
+                className="mb-3"
+              >
+                <Form.Control  onChange={(e)=>setHotelData({...hotelData,checkin:e.target.value})} type="time" placeholder="Check in" />
+              </FloatingLabel></div>
+      <div className="col-lg-6">
+      <FloatingLabel
+                controlId="floatingInput4"
+                label="Check out"
+                className="mb-3"
+              >
+                <Form.Control  onChange={(e)=>setHotelData({...hotelData,checkout:e.target.value})} type="time" placeholder="Check out" />
+              </FloatingLabel>
+      </div>
       <label className='ps-3' htmlFor="">
         Amenities
       </label>
       <div id='group1' className="col-lg-12 mb-3 ps-3" key="inline-checkbox" >
       
-      <Form.Check
-          inline
-          label="Pool"
-          value={"pool"}
-          name="group1"
-          type="checkbox"
-          onChange={(e)=>handleAmenitiesChange(e)}
-          id="inline-checkbox-1"
-        />
-        <Form.Check
-          inline
-          label="WiFi"
-          value={"WiFi"}
-          name="group1"
-          type="checkbox"
-          onChange={(e)=>handleAmenitiesChange(e)}
-          id="inline-checkbox-2"
-        />
-        <Form.Check
-          inline
-          label="Parking"
-          value={"Parking"}
-          name="group1"
-          type="checkbox"
-          onChange={(e)=>handleAmenitiesChange(e)}
-          id="inline-checkbox-3"
-        />
-        <Form.Check
-          inline
-          label="Gym"
-          value={"Gym"}
-          name="group1"
-          type="checkbox"
-          onChange={(e)=>handleAmenitiesChange(e)}
-          id="inline-checkbox-4"
-        />
-         <Form.Check
-          inline
-          label=" Laundry service"
-          value={"Laundry"}
-          name="group1"
-          type="checkbox"
-          onChange={(e)=>handleAmenitiesChange(e)}
-          id="inline-checkbox-5"
-        />
+      {['Wifi', 'Parking', 'Pool', 'Gym', 'Games'].map((amenity, i) => (
+                                                <Button
+                                                    key={i}
+                                                    variant={hotelData.amenities.includes(amenity) ? 'primary' : 'outline-secondary'}
+                                                    size="sm"
+                                                    className="m-1"
+                                                    onClick={() => handleAmenitiesChange("", amenity,"hotel")}
+                                                >
+                                                    {amenity}
+                                                </Button>
+                                            ))}
       </div>
       <div className="col-lg-12  p-3  d-flex align-items-center justify-content-center ">
         <div className='w-75  ' style={{minHeight:"200px"}}> 
@@ -192,7 +346,7 @@ const handleAmenitiesChange=(e)=>{
             <input
           type="file"
           multiple
-          onChange={(e)=>handleImageUpload(e,"hotel")}
+          onChange={(e)=>handleImageUploadHotel(e)}
           style={{ display: "none" }}
           accept="image/*"
         />
@@ -201,6 +355,7 @@ const handleAmenitiesChange=(e)=>{
         </div> 
       
       </div>
+      
       <div className='d-flex flex-wrap gap-2' >
          {hotelData.images.map((image,index)=>(
           <div key={index} style={{position:"relative"}}>
@@ -229,22 +384,136 @@ const handleAmenitiesChange=(e)=>{
         </div>
      </div>:
     //  **************************************//
-   <p>modal for room details here</p>
-    //  **************************************//
+  <div>
+     {
+      roomData.map((room,index)=>(
+       <div className="row border py-3 mt-2 mb-3">
+        <div className='pb-3 d-flex align-items-center justify-content-between'><h5>Room type {index+1}</h5>
+        <Button
+        variant='danger'
+        size='sm'
+        onClick={()=>removeRoomType(index)}
+        >Remove</Button>
+        </div>
+        <div className="col-lg-6">
+        <Form.Select  value={roomData[index].roomType}  onChange={(e)=>handleRoomDataChange(index,"roomType",e)} className='mb-3' style={{height:"58px"}} aria-label="Default select example">
+          <option>Room type</option>
+          <option value="Single">Single</option>
+          <option value="Double">Double</option>
+          <option value="Suite">Suite</option>
+          <option value="Deluxe">Deluxe</option>
 
+        </Form.Select>
+        </div>
+        <div className="col-lg-6">
+        <FloatingLabel
+                controlId="floatingInput1"
+                label="No of rooms"
+                className="mb-3"
+              >
+                <Form.Control value={roomData[index].numberOfRooms}  onChange={(e)=>handleRoomDataChange(index,"numberOfRooms",e)}  type="number" placeholder="No of rooms" />
+              </FloatingLabel>
+        </div>
+        <div className="col-lg-6">
+        <FloatingLabel
+                controlId="floatingInput10"
+                label="Price per Night"
+                className="mb-3"
+              >
+                <Form.Control  value={roomData[index].pricePerNight}  onChange={(e)=>handleRoomDataChange(index,"pricePerNight",e)}   type="number" placeholder="Price per Night" />
+              </FloatingLabel>
+        </div>
+        <div className="col-lg-6">
+        <FloatingLabel
+                controlId="floatingInput11"
+                label="Description of Room"
+                className="mb-3"
+              >
+                <Form.Control  value={roomData[index].description}  onChange={(e)=>handleRoomDataChange(index,"description",e)}  type="text" placeholder="Description" />
+              </FloatingLabel>
+        </div>
+        <label className='ps-3' htmlFor="">
+        Amenities
+      </label>
+      <div id='group1' className="col-lg-12 mb-3 ps-3"  >
+      
+      {['Wifi', 'Air Conditioning', 'TV', 'Kitchen', 'Locker'].map((amenity, i) => (
+                                                <Button
+                                                    key={i}
+                                                    variant={room.amenities.includes(amenity) ? 'primary' : 'outline-secondary'}
+                                                    size="sm"
+                                                    className="m-1"
+                                                    onClick={() => handleAmenitiesChange(index, amenity,"room")}
+                                                >
+                                                    {amenity}
+                                                </Button>
+                                            ))}
+      </div>
+       <div className="col-lg-12  p-3  d-flex align-items-center justify-content-center ">
+        <div className='w-75  ' style={{minHeight:"200px"}}> 
+          <label style={{  display: "block",
+          padding: "15%",
+          border: "2px dashed blue",
+          cursor: "pointer",
+          textAlign: "center",
+          marginBottom: "10px",
+}}>
+            Click to add images
+            <input
+          type="file"
+          multiple
+          onChange={(e)=>handleImageUploadRoom(index,e)}
+          style={{ display: "none" }}
+          accept="image/*"
+        />
+
+          </label>
+        </div> 
+      
+      </div>
+      <div className='d-flex flex-wrap gap-2' >
+         {roomData[index].images.map((image,imgIndex)=>(
+          <div key={imgIndex} style={{position:"relative"}}>
+            <img src={URL.createObjectURL(image)} alt=""
+            style={{width:"100px",height:"100px",objectFit: "cover", borderRadius: "5px"}}
+            />
+             <button
+              onClick={() => handleRemoveImageRoom(index,imgIndex)}
+              style={{
+                position: "absolute",
+                top: "1%",
+                right: "1%",
+                background: "black",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              ✕
+            </button>
+
+            </div>
+         ) )
+            
+          }
+        </div>
+       </div>
+      ))
+     }
+      <button className='black-btn2 p-2 ms-1' onClick={addRoomType} >+ Add Room </button>
+  
+  </div>
    }
         </Modal.Body>
         <Modal.Footer>
-         {step==1? <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose}>
             Close
-          </Button>:
-           <Button variant="secondary" onClick={()=>setStep(1)}>
-           Back
-         </Button>}
-          {step==1?<Button variant="primary" onClick={()=>setStep(2)}>
+          
+         </Button>
+          {step==1?<Button variant="primary" onClick={handleNextClick}>
             Next</Button>:
-            <Button variant="primary">
-            Upload</Button>
+            <Button variant="primary" onClick={handleSubmitForm}>
+            Submit</Button>
           }
         </Modal.Footer>
       </Modal>

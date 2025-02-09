@@ -16,3 +16,31 @@ export const adminRegisterApi=async(reqBody)=>{
 export const adminLoginApi=async(reqBody)=>{
     return await commenApi("POST",`${serverURL}/admin-login`,reqBody)
 }
+
+export const addHotelApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/addhotel`,reqBody,reqHeader)
+}
+
+export const addRoomsApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/addrooms`,reqBody,reqHeader)
+}
+
+export const getAdminHotelsDetailsApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/get-admin-hotelsdetails`,"",reqHeader)
+}
+
+export const deleteProperyApi=async(_id,reqHeader)=>{
+    return await commenApi("DELETE",`${serverURL}/delete-hotel`,{_id},reqHeader)
+
+}
+export const deleteRoomApi=async(_id,reqHeader)=>{
+    return await commenApi("DELETE",`${serverURL}/delete-room`,{_id},reqHeader)
+
+}
+
+export const getAllHotelsApi=async()=>{
+    return await commenApi("GET",`${serverURL}/get-all-hotels`)
+
+    
+}
+

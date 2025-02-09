@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserNavbar from "../../components/User/UserNavbar";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // Main CSS file for the DateRange picker
 import "react-date-range/dist/theme/default.css"; // Default theme for the DateRange picker
 import HotelCard from "../../components/User/HotelCard";
 import Footer from "../../components/Shared/Footer";
+import { getAllHotelsApi } from "../../Services/allApi";
+
 function Home() {
   const [state, setState] = useState([
     {
@@ -14,6 +16,17 @@ function Home() {
     },
   ]);
 
+  useEffect(() => {
+    getAllHotels()
+  }, [])
+
+  const getAllHotels=async()=>{
+   const result=await getAllHotelsApi()
+   console.log(result);
+   
+  }
+
+  
   const [show, setShow] = useState(false);
 
   const handleShowDate = () => {
