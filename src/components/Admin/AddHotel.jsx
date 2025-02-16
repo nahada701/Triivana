@@ -14,7 +14,29 @@ function AddHotel() {
   const [step, setStep] = useState(1);
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+      setHotelData({  propertyname:"",
+        propertytype:"",
+        phone:"",
+        email:"",
+        checkin:"",
+        checkout:"",
+        address:"",
+        place:"",
+        minPrice:"",
+        description:"",
+        amenities:[],
+        images:[]})
+        setRoomData({
+          roomType: '',
+          numberOfRooms: '', 
+          pricePerNight: '',
+          description:"",
+          amenities: [], 
+          images: []
+        })
+        setShow(false)
+    };
     const handleShow = () => setShow(true);
   
 //hotel data
@@ -27,6 +49,8 @@ const[hotelData,setHotelData]=useState({
   checkin:"",
   checkout:"",
   address:"",
+  place:"",
+  minPrice:"",
   description:"",
   amenities:[],
   images:[]
@@ -79,7 +103,7 @@ const handleRemoveImageHotel=(index)=>{
   }
 
 const  handleNextClick=async()=>{
-const  {propertyname,propertytype,phone,email,address,description,checkin,checkout,amenities,images}=hotelData
+const  {propertyname,propertytype,phone,email,address,place,minPrice,description,checkin,checkout,amenities,images}=hotelData
 if(propertyname&&propertytype&&phone&&email&&address&&description&&images){  // 
 
   const reqBody=new FormData()
@@ -88,6 +112,8 @@ if(propertyname&&propertytype&&phone&&email&&address&&description&&images){  //
   reqBody.append("phone",phone)
   reqBody.append("email",email)
   reqBody.append("address",address)
+  reqBody.append("place",place)
+  reqBody.append("minPrice",minPrice)
   reqBody.append("description",description)
   reqBody.append("checkin",checkin)
   reqBody.append("checkout",checkout)
@@ -214,7 +240,7 @@ const handleSubmitForm = async () => {
     console.log("API responses:", results);
     if(results.map(result=>result.status==200)){
       toast.success("Rooms added successfully!");
-      setShow(false); 
+      handleClose()
       setStep(1)
       setAddResponse(results)
       
@@ -285,22 +311,7 @@ const handleSubmitForm = async () => {
                 <Form.Control  onChange={(e)=>setHotelData({...hotelData,email:e.target.value})} type="email" placeholder="Email" />
               </FloatingLabel>
         </div>
-        <div className="col-lg-12">
-        <FloatingLabel
-                controlId="floatingInput2"
-                label="Address"
-                className="mb-3"
-              >
-                <Form.Control onChange={(e)=>setHotelData({...hotelData,address:e.target.value})} type="text" placeholder="Address" />
-              </FloatingLabel>
-        </div>
-      <div className='col-lg-12'>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-            
-            <Form.Control onChange={(e)=>setHotelData({...hotelData,description:e.target.value})} placeholder='Description' as="textarea" rows={3} />
-          </Form.Group>
-      </div>
-      <div className="col-lg-6">   <FloatingLabel
+        <div className="col-lg-6">   <FloatingLabel
                 controlId="floatingInput4"
                 label="Check in"
                 className="mb-3"
@@ -316,12 +327,95 @@ const handleSubmitForm = async () => {
                 <Form.Control  onChange={(e)=>setHotelData({...hotelData,checkout:e.target.value})} type="time" placeholder="Check out" />
               </FloatingLabel>
       </div>
+        <div className="col-lg-6">
+        <FloatingLabel
+                controlId="floatingInput4"
+                label="Place"
+                className="mb-3"
+              >
+                <Form.Control  onChange={(e)=>setHotelData({...hotelData,place:e.target.value})} type="email" placeholder="Email" />
+              </FloatingLabel>
+        </div>
+        <div className="col-lg-6">
+        <FloatingLabel
+                controlId="floatingInput4"
+                label="Minimum Price Per Night"
+                className="mb-3"
+              >
+                <Form.Control  onChange={(e)=>setHotelData({...hotelData,minPrice:e.target.value})} type="email" placeholder="Email" />
+              </FloatingLabel>
+        </div>
+        
+        <div className="col-lg-12">
+        <FloatingLabel
+                controlId="floatingInput2"
+                label="Address"
+                className="mb-3"
+              >
+                <Form.Control onChange={(e)=>setHotelData({...hotelData,address:e.target.value})} type="text" placeholder="Address" />
+              </FloatingLabel>
+        </div>
+      <div className='col-lg-12'>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            
+            <Form.Control onChange={(e)=>setHotelData({...hotelData,description:e.target.value})} placeholder='Description' as="textarea" rows={3} />
+          </Form.Group>
+      </div>
+    
       <label className='ps-3' htmlFor="">
         Amenities
       </label>
       <div id='group1' className="col-lg-12 mb-3 ps-3" key="inline-checkbox" >
       
-      {['Wifi', 'Parking', 'Pool', 'Gym', 'Games'].map((amenity, i) => (
+      { [
+  // General Hotel Services
+  "Free WiFi", "24/7 Front Desk", "Concierge Service", "Luggage Storage",
+  "Express Check-in/Check-out", "Security (CCTV, Guards, Key Card Access)",
+  "Daily Housekeeping", "Laundry Service", "Dry Cleaning", "Elevator",
+  "Wheelchair Accessibility", "Parking (Free/Paid)", "Valet Parking",
+  "Multi-Language Staff", "Smoking/Non-Smoking Areas",
+
+  // Food & Beverage
+  "In-House Restaurant", "Bar/Lounge", "Breakfast Included",
+  "Buffet & A La Carte Options", "24/7 Room Service", "Coffee Shop",
+  "Poolside Bar", "Wine Tasting", "Afternoon Tea Service",
+
+  // Business & Conference Facilities
+  "Business Center", "Meeting Rooms", "Conference Halls",
+  "Co-Working Space", "Printing & Fax Services", "High-Speed Internet",
+  "Projector & AV Equipment",
+
+  // Wellness & Fitness
+  "Spa & Wellness Center", "Massage Services", "Sauna & Steam Room",
+  "Jacuzzi", "Yoga & Meditation Area", "Beauty Salon", "Gym/Fitness Center",
+  "Personal Trainer Availability",
+
+  // Entertainment & Recreation
+  "Swimming Pool (Indoor/Outdoor)", "Kids' Pool", "Movie Theatre",
+  "Gaming Zone", "Live Music/Entertainment", "Casino", "Library",
+  "Art Gallery", "Virtual Golf Simulator",
+
+  // Outdoor & Adventure
+  "Private Beach Access", "Water Sports (Jet Skiing, Kayaking, etc.)",
+  "Diving & Snorkeling", "Hiking & Nature Trails", "Tennis Court",
+  "Basketball Court", "Golf Course", "Horse Riding",
+
+  // Family & Kids-Friendly
+  "Kids' Play Area", "Babysitting Services", "Family Suites",
+  "Child-Friendly Pool", "Children’s Activity Programs",
+
+  // Pet-Friendly Services
+  "Pet-Friendly Rooms", "Pet Grooming & Daycare", "Pet Walking Services",
+  "Pet-Friendly Dining Areas",
+
+  // Transportation & Travel Services
+  "Airport Shuttle", "Car Rental Service", "Bicycle Rentals",
+  "Tour Desk & Excursions", "EV Charging Stations",
+
+  // Eco-Friendly Initiatives
+  "Solar Power Usage", "Water Recycling System", "Organic Toiletries",
+  "Smart Energy Management",
+].map((amenity, i) => (
                                                 <Button
                                                     key={i}
                                                     variant={hotelData.amenities.includes(amenity) ? 'primary' : 'outline-secondary'}
@@ -437,7 +531,31 @@ const handleSubmitForm = async () => {
       </label>
       <div id='group1' className="col-lg-12 mb-3 ps-3"  >
       
-      {['Wifi', 'Air Conditioning', 'TV', 'Kitchen', 'Locker'].map((amenity, i) => (
+      {[
+  // Basic Room Features
+  "Private Balcony/Terrace", "Air Conditioning", "Heating", "Soundproofing",
+  "Smart TV", "Cable/Satellite TV", "Free WiFi", "Mini-Bar", "Refrigerator",
+  "Coffee/Tea Maker", "Microwave", "Dining Table", "Work Desk & Chair",
+
+  // Comfort & Convenience
+  "Safe Locker", "Iron/Ironing Board", "Wardrobe/Closet", "Blackout Curtains",
+  "In-Room Dining", "Sofa Bed", "Extra Bed on Request", "Reading Lamps",
+
+  // Bathroom Amenities
+  "Ensuite Bathroom", "Bathtub", "Jacuzzi", "Rain Shower",
+  "Heated Bathroom Floors", "Complimentary Toiletries", "Hair Dryer",
+  "Bathrobes & Slippers", "Bidet", "Toothbrush & Razor Kit",
+
+  // Premium & Luxury Features
+  "In-Room Butler Service", "Personalized Pillow Menu", "Smart Room Controls",
+  "Alexa/Google Assistant Integration", "Floor-to-Ceiling Windows",
+  "Panoramic City/Ocean View", "Private Pool/Villa Access",
+
+  // Technology & Smart Features
+  "Voice-Controlled Room Automation", "Wireless Phone Charging",
+  "Bluetooth Speaker System", "Mood Lighting Control", "Digital Room Key",
+  "Smart Mirror with TV Display", "Automated Curtains",
+].map((amenity, i) => (
                                                 <Button
                                                     key={i}
                                                     variant={room.amenities.includes(amenity) ? 'primary' : 'outline-secondary'}

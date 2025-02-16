@@ -2,7 +2,9 @@ import React from 'react'
 
 function Earnings() {
   return (
-    <div>Earnings</div>
+    <div>
+      Earnings
+    </div>
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UserNavbar from "../../components/User/UserNavbar";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // Main CSS file for the DateRange picker
@@ -6,8 +6,10 @@ import "react-date-range/dist/theme/default.css"; // Default theme for the DateR
 import HotelCard from "../../components/User/HotelCard";
 import Footer from "../../components/Shared/Footer";
 import { getAllHotelsApi } from "../../Services/allApi";
-
+import { addResponseContext } from "../../context/ContextApi";
 function Home() {
+    const{addResponse,setAddResponse}=useContext(addResponseContext)
+  
   const [state, setState] = useState([
     {
       startDate: new Date(),
@@ -18,11 +20,22 @@ function Home() {
 
   useEffect(() => {
     getAllHotels()
-  }, [])
+  }, [addResponse])
+
+  const[allHotels,setAllHotels]=useState()
+console.log(allHotels);
+
 
   const getAllHotels=async()=>{
-   const result=await getAllHotelsApi()
-   console.log(result);
+   try{const result=await getAllHotelsApi()
+   if(result.status==200){
+    setAllHotels(result.data)
+   }
+  }catch(err){
+    console.log(err);
+    
+   }
+   
    
   }
 
@@ -209,29 +222,29 @@ function Home() {
         {/* property type cards */}
 
         <div className="row mt-4">
+        
+         {allHotels?.length>0&& 
+         allHotels.map(hotel=>(
           <div className="col-lg-3 col-sm-6">
-           <HotelCard/>
-          </div>
-          <div className="col-lg-3 col-sm-6">
-           <HotelCard/>
-          </div> <div className="col-lg-3 col-sm-6">
-           <HotelCard/>
-          </div> <div className="col-lg-3 col-sm-6">
-           <HotelCard/>
-          </div>
+          <HotelCard hotel={hotel} />
+         </div>
+         ))
+         }
+        
+        
         
         </div>
 
       </div>
 
       {/* most visited */}
-      
+{/*       
       <div className="text-dark p-4 destination">
         <h2>Most visited hotels this month</h2>
-        <p>Trending and excpetional hospitality that captivated travelers this month</p>
+        <p>Trending and excpetional hospitality that captivated travelers this month</p> */}
 
         {/* property type cards */}
-
+{/* 
         <div className="row mt-4">
           <div className="col-lg-3">
            <HotelCard/>
@@ -246,7 +259,7 @@ function Home() {
         
         </div>
 
-      </div>
+      </div> */}
       <Footer/>
 
    </div>

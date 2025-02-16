@@ -44,3 +44,14 @@ export const getAllHotelsApi=async()=>{
     
 }
 
+export const addReviewApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/add-review`,reqBody,reqHeader)
+}
+
+export const getSingleHotelsApi=async(id)=>{
+    return await commenApi("GET",`${serverURL}/get-single-hotel/${id}`)
+}
+
+export const LoginSuperAdminApi=async(reqBody)=>{
+    return await commenApi("POST",`${serverURL}/super-admin-login`,reqBody)
+}

@@ -12,20 +12,30 @@ function Sidebar() {
 
   // Update active link based on current URL
   useEffect(() => {
-    if (location.pathname.includes("manage-listings")) setActiveLink("Manage Listings");
-    else if (location.pathname.includes("bookings")) setActiveLink("Bookings");
-    else if (location.pathname.includes("reviews")) setActiveLink("Reviews & Ratings");
-    else if (location.pathname.includes("earnings")) setActiveLink("Earnings");
-    else if (location.pathname.includes("settings")) setActiveLink("Settings");
+    if (location.pathname === "/dashboard") {
+      setActiveLink(""); // Reset active link when on the dashboard home page
+    } else if (location.pathname.includes("manage-listings")) {
+      setActiveLink("Manage Listings");
+    } else if (location.pathname.includes("bookings")) {
+      setActiveLink("Bookings");
+    } else if (location.pathname.includes("reviews")) {
+      setActiveLink("Reviews & Ratings");
+    } else if (location.pathname.includes("earnings")) {
+      setActiveLink("Earnings");
+    } else if (location.pathname.includes("settings")) {
+      setActiveLink("Settings");
+    }
   }, [location]);
-
   return (
     <Navbar expand="md" className="bg-dark mb-3">
       <Container fluid>
         <Navbar.Brand>
-          <div className="d-flex align-items-center">
-            <img src={logo} style={{ width: '50px' }} alt="" />
-            <span className="fs-2 text-light">Dashboard</span>
+          <div className="d-flex align-items-center" >
+            <Link to="/dashboard" style={{textDecoration:"none"}}>
+              <img src={logo} style={{ width: '50px' }} alt="" />
+              <span className="fs-2 text-light">Dashboard</span>
+
+            </Link>
           </div>
         </Navbar.Brand>
         <Navbar.Toggle className="bg-light" aria-controls="offcanvasNavbar-expand-md" />

@@ -6,13 +6,16 @@ import Bookings from '../../components/Admin/sidebarcompoentns/Bookings';
 import Reviews from '../../components/Admin/sidebarcompoentns/Reviews';
 import Earnings from '../../components/Admin/sidebarcompoentns/Earnings';
 import Settings from '../../components/Admin/sidebarcompoentns/Settings';
+import DashboardContent from '../../components/Admin/sidebarcompoentns/DashboardContent';
 
 function Dashboard() {
   return (
     <div>
       <Sidebar />
       <div className='main-content'>
+        
         <Routes>
+          <Route path="" element={<DashboardContent />} />
           <Route path="manage-listings" element={<ManageListings />} />
           <Route path="bookings" element={<Bookings />} />
           <Route path="reviews" element={<Reviews />} />

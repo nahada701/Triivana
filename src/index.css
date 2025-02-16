@@ -3,6 +3,8 @@
   font-family: "Poppins", serif;
   font-weight: 300;
   font-style: normal;
+  margin: 0;
+  padding: 0;
 }
 .banner{
 
@@ -128,10 +130,74 @@
   transition: .2s;
   transform: scale(1.02);
 }
+.hotelImg{
+  height: 270px;
+}
 .hotelImg:hover{
   transition: .2s;
   transform: scale(1.02);
 }
 .bg-color{
   background-color: #040507;
+}
+.firstImg{
+  height:400px;
+  border-radius:20px 0 0 20px;
+}
+.rightBottom {
+  border-radius:0 0px 20px 0px !important;
+}
+.rightTop{
+  border-radius:0 20px 0 0px !important;
+}
+@media (max-width:767px){
+ .firstImg
+ { height:192px !important;
+  border-radius:0px 0 0 0px !important;}
+  .rightBottom {
+    border-radius:0px 0 0 0px !important
+  }
+  .rightTop{
+    border-radius:0px 0 0 0px !important
+
+  }
+}
+
+.bg-primary-light{
+  background-color: #f0f6ff;
+}
+.grid-container {
+  display: grid;
+  grid-template-rows: max-content;
+  flex-wrap: wrap;
+  grid-template-columns: 1fr 2fr 1fr 2fr 3fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .grid-container {
+    text-align: start;
+    grid-template-columns: 1fr; /* Stack items in smaller screens */
+  }
+}
+.MuiRating-iconFilled {
+  color: #FFD700 !important; /* Force yellow */
+}
+
+.MuiRating-iconEmpty {
+  color: #D3D3D3 !important; /* Light gray */
+}
+.superadmin-sidebar{
+  min-height: 103vh;
+  position:fixed;
+  background-color:#212529;
+  margin-bottom: 0px;
+}
+@media (max-width:767px) {
+  .superadmin-sidebar{
+    min-height: 20vh;
+  background-color: transparent;
+
+  }
 }

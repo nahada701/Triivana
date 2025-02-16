@@ -14,7 +14,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 function UserNavbar() {
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
 
-  const [userDetails,setUserDetails]=useState({email:"",password:"",confirmPassword:""})
+  const [userDetails,setUserDetails]=useState({name:"",email:"",password:"",confirmPassword:""})
 
 const [username,setUsername]=useState("")
   console.log(userDetails);
@@ -27,7 +27,7 @@ const [username,setUsername]=useState("")
   
 useEffect(() => {
 if(sessionStorage.getItem("user")){
-setUsername(JSON.parse(sessionStorage.getItem("user")).email)
+setUsername(JSON.parse(sessionStorage.getItem("user")).name)
 setIsLogedin(true)
 
 
@@ -50,7 +50,7 @@ useEffect(() => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
-    setUserDetails({email:"",password:"",confirmPassword:""})
+    setUserDetails({name:"",email:"",password:"",confirmPassword:""})
     setShow(false)
   };
   const handleShow = () => setShow(true);
@@ -67,17 +67,17 @@ useEffect(() => {
   }
 
   const handleregister=async()=>{
-    const{email,password,confirmPassword}=userDetails
+    const{name,email,password,confirmPassword}=userDetails
 
-    if(email&&password&&confirmPassword){
+    if(name&&email&&password&&confirmPassword){
       if(confirmPassword==password){
-        const reqBody={email,password}
+        const reqBody={name,email,password}
         try{
           const result=await userRegisterApi(reqBody)
           if(result.status==200){
             toast.success("user registerd successfully")
             setIsSignup(false)
-            setUserDetails({email:"",password:"",confirmPassword:""})
+            setUserDetails({name:"",email:"",password:"",confirmPassword:""})
           }
           else if(result.status==406){
             toast.error("user already exists")
@@ -151,7 +151,7 @@ useEffect(() => {
           >
             <i className={`fa-solid ${isNavbarExpanded ? 'fa-xmark' : 'fa-bars'}`} />
           </button>
-
+    
           <Navbar.Collapse id="basic-navbar-nav" className={isNavbarExpanded ? 'show' : ''}>
             <Nav className="ms-auto">
               <button className="btn text-light">
@@ -196,6 +196,11 @@ useEffect(() => {
       
         </Modal.Header>
         <Modal.Body>
+        {isSignup && 
+      
+      <FloatingLabel controlId="name" label="Name">
+        <Form.Control value={userDetails.name} onChange={(e)=>setUserDetails({...userDetails,name:e.target.value})} type="text" placeholder="name"   className="mb-3"/>
+      </FloatingLabel>}
         <FloatingLabel
         controlId="floatingInput"
         label="Email address"

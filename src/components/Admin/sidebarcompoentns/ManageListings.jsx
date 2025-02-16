@@ -2,21 +2,21 @@ import React, { useContext, useEffect, useState } from 'react'
 import AddHotel from '../AddHotel'
 import { deleteProperyApi, deleteRoomApi, getAdminHotelsDetailsApi } from '../../../Services/allApi'
 import serverURL from '../../../Services/ServerURL'
-import { addResponseContext, deleteResponseContext } from '../../../context/ContextApi'
+import { addResponseContext, addReviewContext, deleteResponseContext } from '../../../context/ContextApi'
 import { toast } from 'react-toastify'
 
 function ManageListings() {
 
   const{addResponse,setAddResponse}=useContext(addResponseContext)
   const{deleteResponse,setDeleteResponse}=useContext(deleteResponseContext)
-  
+    const{addReview,setAddReview}=useContext(addReviewContext)
   
   const [hotelsWithRoomData,setHotelsWithRoomsData]=useState([])
 console.log(hotelsWithRoomData);
 
 useEffect(() => {
  getHotelsAllData()
-}, [addResponse,deleteResponse])
+}, [addResponse,deleteResponse,addReview])
 
 const getHotelsAllData=async()=>{
 
@@ -140,17 +140,22 @@ const handleRoomDelete=async(id)=>{
 
        </div>
        <h4>{hotel.propertyname}</h4>
+       <h5 className='text-dark'>₹ {hotel?.minPrice}</h5>
       <div className='d-flex flex-wrap justify-content-between'> 
-       <h6>{hotel.address}</h6>
+
+       <h6>{hotel.place}</h6>
        <h6>{hotel.phone}</h6>
        <h6>{hotel.email}</h6>
 
        </div>
+       <h5>{hotel?.address}</h5>
+     
+
        <p>{hotel.description}</p>
 
       </div>
       {hotel.amenities.map(amenity => (
-<button className='btn btn-dark ms-3 p-1' key={amenity}>{amenity}</button>
+<button className='btn btn-dark mb-2 ms-3 p-1' key={amenity}>{amenity}</button>
 ))}
 
 <div className="p-4 ">

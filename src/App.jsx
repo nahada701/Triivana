@@ -9,17 +9,26 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminLogin from './pages/Admin/AdminLogin';
 import Dashboard from './pages/Admin/Dashboard';
+import ScrollToTop from './components/Shared/ScrollToTop';
+import SuperAdminLogin from './pages/SuperAdmin/SuperAdminLogin';
+import SuperAdminDashboard from './pages/SuperAdmin/SuperAdminDashboard';
+
 
 function App() {
   return (
     <>
       <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+        <ScrollToTop/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/hoteldetails" element={<HotelDetails />} />
+        <Route path="/hoteldetails/:id" element={<HotelDetails />} />
         <Route path="/mybookings" element={<MyBookings />} />
         <Route path="/partner-register" element={<AdminLogin />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/superadmin-login" element={<SuperAdminLogin />} />
+        <Route path="/superadmin-dashboard/*" element={<SuperAdminDashboard />} />
+
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

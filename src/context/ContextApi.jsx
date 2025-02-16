@@ -2,11 +2,15 @@ import React, { createContext, useState } from 'react'
 
 
 export const addResponseContext=createContext()
+export const addReviewContext=createContext()
+
 export const deleteResponseContext=createContext()
 
 
 function ContextApi({children}) {
     const [addResponse,setAddResponse]=useState()
+    const [addReview,setAddReview]=useState()
+
     const [deleteResponse,setDeleteResponse]=useState()
 
  
@@ -15,7 +19,7 @@ function ContextApi({children}) {
         <addResponseContext.Provider value={{addResponse,setAddResponse}} >
         
            <deleteResponseContext.Provider value={{deleteResponse,setDeleteResponse}}>
-              {children}
+              <addReviewContext.Provider  value={{addReview,setAddReview}}>{children}</addReviewContext.Provider>
          
            </deleteResponseContext.Provider>
         </addResponseContext.Provider>
