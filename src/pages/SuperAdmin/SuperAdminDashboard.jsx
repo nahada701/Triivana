@@ -9,27 +9,27 @@ import ReviewsRatings from './sidebarComponents/ReviewsRatings'
 import SuperAdminSettings from './sidebarComponents/SuperAdminSettings'
 
 function SuperAdminDashboard() {
-  return (
-    <div>
-        <div className="row" style={{minHeight:"98vh"}}>
-            <div className="col-md-3">
-            <SuperAdminSidebar/>
-            </div>
-            <div className="col-md-9">
-
-            <Routes>
-          <Route path="" element={<DashboardSuperAdmin />} />
-          <Route path="property-owners" element={<PropertOwners />} />
-          <Route path="user-management" element={<UserManagement />} />
-          <Route path="property-management" element={< PropertyManagment/>} />
-          <Route path="reviews-ratings" element={<ReviewsRatings />} />
-          <Route path="settings" element={<SuperAdminSettings />} />
-        </Routes>
-            </div>
-        </div>
-    </div>
-  )
-}
+    return (
+      <div  className="d-flex flex-column">
+          <div className="superadmin-sidebar ">
+              <SuperAdminSidebar />
+              
+          </div>
+          <div className="content-wrapper flex-grow-1">
+              <Routes>
+                  <Route path="" element={<DashboardSuperAdmin />} />
+                  <Route path="property-owners" element={<PropertOwners />} />
+                  <Route path="user-management" element={<UserManagement />} />
+                  <Route path="property-management" element={<PropertyManagment />} />
+                  <Route path="reviews-ratings" element={<ReviewsRatings />} />
+                  <Route path="settings" element={<SuperAdminSettings />} />
+              </Routes>
+          </div>
+      </div>
+    );
+  }
+  
+  
 
 export default SuperAdminDashboard
 

@@ -188,16 +188,29 @@
 .MuiRating-iconEmpty {
   color: #D3D3D3 !important; /* Light gray */
 }
-.superadmin-sidebar{
-  min-height: 103vh;
-  position:fixed;
-  background-color:#212529;
+.superadmin-sidebar {
+  min-height: 100%;
+  position: fixed;
+  background-color: #212529;
   margin-bottom: 0px;
+  width: 250px; /* Fixed width for sidebar */
 }
-@media (max-width:767px) {
-  .superadmin-sidebar{
-    min-height: 20vh;
-  background-color: transparent;
 
+.content-wrapper {
+  margin-left: 250px; /* Offset content by the sidebar width */
+  transition: margin-left 0.3s ease; /* Smooth transition when resizing */
+  padding: 20px; /* Add some padding for spacing */
+}
+
+@media (max-width: 767px) {
+  .superadmin-sidebar {
+    min-height: 10vh;
+    background-color: black;
+    width: 100%;
+    position: static; /* Sidebar should be static in smaller screens */
+  }
+
+  .content-wrapper {
+    margin-left: 0; /* No margin on mobile */
   }
 }

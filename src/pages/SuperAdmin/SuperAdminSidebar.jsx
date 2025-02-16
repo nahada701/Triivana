@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import logoT from '../../assets/logoT.png';
+import logoT from '../../assets/logo trivana.png';
 import { Link, useLocation } from 'react-router-dom';
 
 
@@ -29,13 +29,13 @@ function SuperAdminSidebar() {
       }
     }, [location]);
   return (
-    <div className='text-light pt-5 superadmin-sidebar' >
+    <div className='text-light pt-5 superadmin-sidebar d-flex d-md-block align-items-center' >
         <Navbar.Brand>
-          <div className="d-flex ms-4 align-items-center">
-           <Link to={'/superadmin-dashboard'}> <img className='img-fluid d-none d-md-block' src={logoT} style={{ width: '150px' }} alt="" /></Link>
+          <div className="d-flex ms-4 align-items-center ">
+           <Link to={'/superadmin-dashboard'} style={{textDecoration:"none"}} className='text-light d-flex align-items-center'> <img className='img-fluid ' src={logoT} style={{ width: '50px' }} alt="" /> <h3>Dashbaord</h3></Link>
           </div>
         </Navbar.Brand>
-          <Navbar expand="md" className=" mb-3">
+          <Navbar expand="md" className=" ms-auto">
           <Container fluid>
           
       <Navbar.Toggle className="bg-light" aria-controls="offcanvasNavbar-expand-md" />
@@ -46,7 +46,7 @@ function SuperAdminSidebar() {
 >
   <Offcanvas.Header className="bg-dark text-light" closeButton />
   <Offcanvas.Body className="bg-dark">
-    <Nav className="d-flex flex-column  justify-content-center gap-4 flex-grow-1 pe-3">
+    <Nav  className=" d-flex  flex-column  justify-content-center gap-4 flex-grow-1 pe-3">
       <Link to="/superadmin-dashboard/property-owners" className={`nav-link ${activeLink === "property-owners" ? "text-primary" : "text-light"}`}>
       Property owners
       </Link>
@@ -63,10 +63,13 @@ function SuperAdminSidebar() {
         Settings
       </Link>
     </Nav>
+    
   </Offcanvas.Body>
 </Navbar.Offcanvas>
 </Container>
 </Navbar>
+
+
     </div>
   )
 }
