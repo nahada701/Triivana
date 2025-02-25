@@ -214,3 +214,24 @@
     margin-left: 0; /* No margin on mobile */
   }
 }
+
+.bg-mustard{
+  background-color: rgb(93 113 109 / 70%) !important;
+}
+.text-mustard{
+  color: rgb(93 113 109 / 70%) !important;
+}
+
+.bg-peacock{
+  background-color: rgb(8 95 94) !important;
+}
+.text-peacock{
+  color: rgb(8 95 94) !important;
+}
+
+.bg-light-dark{
+  background-color: rgb(33 37 41 / 88%) !important;
+}
+.text-light-dark{
+  color: rgb(33 37 41 / 88%) !important;
+}

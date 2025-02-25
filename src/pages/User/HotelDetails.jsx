@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import hotelimg from '../../assets/r3.jpg'
 import serverURL from '../../Services/ServerURL';
@@ -10,7 +10,8 @@ import StarIcon from '@mui/icons-material/Star';
 import Footer from '../../components/Shared/Footer';
 import { toast } from 'react-toastify';
 import { addReviewApi, getSingleHotelsApi } from '../../Services/allApi';
-import { addReviewContext } from '../../context/ContextApi';
+import { updateReviewContext } from '../../context/ContextApi';
+import UserNavbar from '../../components/User/UserNavbar';
 
 const labels = {
 
@@ -32,17 +33,15 @@ function getLabelText(value) {
 
 function HotelDetails() {
  
+  const selectRoomRef=useRef(null)
 
-  const{addReview,setAddReview}=useContext(addReviewContext)
+const{updateReview,setUpdateReview}=useContext(updateReviewContext)
 
   const [show, setShow] = useState(false);
- 
-
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [showRoom, setShowRoom] = useState(false);
 
+  const [showRoom, setShowRoom] = useState(false);
   const handleCloseRoom = () => setShowRoom(false);
   const handleShowRoom = () => setShowRoom(true);
 
@@ -62,7 +61,7 @@ console.log("hotel detials",hotel);
 
 useEffect(() => {
 if(id){getHotelDetilas()}
-}, [id,addReview])
+}, [id,updateReview])
 
 const getHotelDetilas=async()=>{
   try{
@@ -97,9 +96,10 @@ const getHotelDetilas=async()=>{
     console.log(result);
     
     if(result.status==200){
-      toast.success("Add review successfully")
+      toast.success("Thanks for the honest review")
       setReview("")
-      setAddReview(result.data)
+      setUpdateReview(result.data)
+     
     }
     
    } catch (error) {
@@ -115,10 +115,21 @@ const getHotelDetilas=async()=>{
 
   }
 
+const scrollToSelectRoom =()=>{
+  if(selectRoomRef.current){
+    selectRoomRef.current.scrollIntoView({ behavior: 'smooth' });
+
+  }
+}
+
   return (
+
   <div className=''>
+      <div className="bg-dark">
+          <UserNavbar></UserNavbar>
+        </div>
       <div className='mt-3 mb-5 container '>
-      <Link to={'/'} className='btn'><i className='fa-solid fa-arrow-left '></i></Link>
+      
      <div className=''> 
       <i className='fa-solid fa-star text-warning '></i>
       <i className='fa-solid fa-star text-warning '></i>
@@ -182,11 +193,11 @@ const getHotelDetilas=async()=>{
             <div className="mt-2 d-flex justify-content-between">
               <span className='text-black '>Check in  : {hotel?.checkin}
               </span>
-              <span className='text-black'>Check in  : {hotel?.checkin}
+              <span className='text-black'>Check out  : {hotel?.checkout}
               </span>
             </div>
             <div className="col-12">
-              <button className='w-100 btn btn-primary mt-3'>Reserve</button>
+              <button onClick={scrollToSelectRoom} className='w-100 btn btn-primary mt-3'>Reserve</button>
               <button className='w-100 btn  border-primary mt-3'>
               <i className='fa-solid fa-heart text-primary'></i>  Save the property
               </button>
@@ -199,97 +210,99 @@ const getHotelDetilas=async()=>{
         </div>
         </div>
   
-        <div className="container mt-3">
-          <h4>Select Room</h4>
-          <div className="container">
-    {/* Table Header */}
-    <div className="d-none d-lg-grid grid-container bg-light p-2">
-      <div>Type</div>
-      <div>Photo</div>
-      <div>Price</div>
-      <div>Description</div>
-      <div>Amenities</div>
-      <div>Reserve</div>
-  
-    </div>
-  
-    {/* Table Body */}
-    {hotel?.rooms.map((room, index) => (
-      <div key={index} className="grid-container border-bottom py-2">
-        <div><h6>{room?.roomType}</h6></div>
-        <div>
-          <img
-            src={`${serverURL}/uploads/${room?.images[0]}`}
-            style={{ width: "100%", height: "200px", objectFit: "cover" }}
-            alt="Room"
-          />
-          <button className='btn' onClick={handleShowRoom}> <i className='fa-solid fa-camera'></i> See all photos</button>
-        </div>
-        <div><h6>₹ {room?.pricePerNight}</h6></div>
-        <div><p>{room?.description}</p></div>
-        <div>
-          {room?.amenities.map((amenity, i) => (
-            <span key={i} className="d-block">
-              <i className="fa-solid fa-check text-success"></i> {amenity}
-            </span>
-          ))}
-        </div>
-        <div><button className='btn border-primary'>Book Room</button></div>
-  
-        
-      </div>
-    ))}
-  </div>
-  {/* reviews */}
-  <div className="my-3">
-  <h4>Reviews</h4>
-  <div className="row">
-    {
-      hotel?.reviews?.map(review=>(
-<div className="col-md-3">
-      <div className="card p-3">
-        <h6>{review.userId?.name} </h6>
-        <span>{review.createdAt.split("T")[0]}</span>
-        <h6>
-         {Array.from({length:review.rating}).map((_,index)=>(
-          <i className='fa-solid fa-star text-warning'></i>
-         ))}
-        </h6>
-          <p>{review.comment}</p>
-  
-      </div>
-    </div>
-      ))
-    }
+        <section id="selectRoom" ref={selectRoomRef}>
+          <div className="container mt-3">
+            <h4>Select Room</h4>
+            <div className="container">
+      {/* Table Header */}
+      <div className="d-none d-lg-grid grid-container bg-light p-2">
+        <div>Type</div>
+        <div>Photo</div>
+        <div>Price</div>
+        <div>Description</div>
+        <div>Amenities</div>
+        <div>Reserve</div>
     
-   
-  
-  </div>
-  
-  {/* add review */}
-  <h6>Add review</h6>
-  <Box sx={{ width: 200, display: 'flex', alignItems: 'center' }}>
-        <Rating
-          name="hover-feedback"
-          value={value}
-          precision={1}
-          getLabelText={getLabelText}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-          onChangeActive={(event, newHover) => {
-            setHover(newHover);
-          }}
-          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-        />
-        {value !== null && (
-          <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
-        )}
-      </Box>
-  <textarea value={review} onChange={(e)=>setReview(e.target.value)} name="" style={{minHeight:"150px"}} className='input form-control' placeholder='Write your review here...' id=""></textarea>
-  <button onClick={handleReviewSubmit} className='black-btn mt-3 text-end '> Submit</button>
-  </div>
+      </div>
+    
+      {/* Table Body */}
+      {hotel?.rooms.map((room, index) => (
+        <div key={index} className="grid-container border-bottom py-2">
+          <div><h6>{room?.roomType}</h6></div>
+          <div>
+            <img
+              src={`${serverURL}/uploads/${room?.images[0]}`}
+              style={{ width: "100%", height: "200px", objectFit: "cover" }}
+              alt="Room"
+            />
+            <button className='btn' onClick={handleShowRoom}> <i className='fa-solid fa-camera'></i> See all photos</button>
+          </div>
+          <div><h6>₹ {room?.pricePerNight}</h6></div>
+          <div><p>{room?.description}</p></div>
+          <div>
+            {room?.amenities.map((amenity, i) => (
+              <span key={i} className="d-block">
+                <i className="fa-solid fa-check text-success"></i> {amenity}
+              </span>
+            ))}
+          </div>
+          <div><button className='btn border-primary'>Book Room</button></div>
+    
+          
         </div>
+      ))}
+    </div>
+    {/* reviews */}
+    <div className="my-3">
+    <h4>Reviews</h4>
+    <div className="row">
+      {
+        hotel?.reviews?.filter(review=>review.status=="approved").map(review=>(
+  <div className="col-md-3 mb-3">
+        <div className="card p-3">
+          <h6>{review.userId?.name} </h6>
+          <span>{review.createdAt.split("T")[0]}</span>
+          <h6>
+           {Array.from({length:review.rating}).map((_,index)=>(
+            <i className='fa-solid fa-star text-warning'></i>
+           ))}
+          </h6>
+            <p>{review.comment}</p>
+    
+        </div>
+      </div>
+        ))
+      }
+      
+     
+    
+    </div>
+    
+    {/* add review */}
+    <h6>Add review</h6>
+    <Box sx={{ width: 200, display: 'flex', alignItems: 'center' }}>
+          <Rating
+            name="hover-feedback"
+            value={value}
+            precision={1}
+            getLabelText={getLabelText}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+            onChangeActive={(event, newHover) => {
+              setHover(newHover);
+            }}
+            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+          />
+          {value !== null && (
+            <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+          )}
+        </Box>
+    <textarea value={review} onChange={(e)=>setReview(e.target.value)} name="" style={{minHeight:"150px"}} className='input form-control' placeholder='Write your review here...' id=""></textarea>
+    <button onClick={handleReviewSubmit} className='black-btn mt-3 text-end '> Submit</button>
+    </div>
+          </div>
+        </section>
         {/* images modal */}
         <Modal show={show} size='xl' onHide={handleClose}>
           <Modal.Header closeButton>

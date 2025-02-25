@@ -17,6 +17,7 @@ const handleSuperAdminLogin=async()=>{
         if(result.status==200){
             toast.success("welcome")
             setAdminDetails({email:"",password:""})
+            sessionStorage.setItem("superAdminToken",result.data.token)
             navigate('/superadmin-dashboard')
 
         }

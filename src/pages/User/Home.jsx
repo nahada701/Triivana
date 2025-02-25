@@ -5,7 +5,7 @@ import "react-date-range/dist/styles.css"; // Main CSS file for the DateRange pi
 import "react-date-range/dist/theme/default.css"; // Default theme for the DateRange picker
 import HotelCard from "../../components/User/HotelCard";
 import Footer from "../../components/Shared/Footer";
-import { getAllHotelsApi } from "../../Services/allApi";
+import { getAllApprovedHotelsApi } from "../../Services/allApi";
 import { addResponseContext } from "../../context/ContextApi";
 function Home() {
     const{addResponse,setAddResponse}=useContext(addResponseContext)
@@ -27,7 +27,7 @@ console.log(allHotels);
 
 
   const getAllHotels=async()=>{
-   try{const result=await getAllHotelsApi()
+   try{const result=await getAllApprovedHotelsApi()
    if(result.status==200){
     setAllHotels(result.data)
    }

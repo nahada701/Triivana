@@ -12,6 +12,7 @@ import Dashboard from './pages/Admin/Dashboard';
 import ScrollToTop from './components/Shared/ScrollToTop';
 import SuperAdminLogin from './pages/SuperAdmin/SuperAdminLogin';
 import SuperAdminDashboard from './pages/SuperAdmin/SuperAdminDashboard';
+import SavedProperties from './pages/User/SavedProperties';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/hoteldetails/:id" element={<HotelDetails />} />
         <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/savedproperies" element={<SavedProperties />} />
         <Route path="/partner-register" element={<AdminLogin />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/superadmin-login" element={<SuperAdminLogin />} />

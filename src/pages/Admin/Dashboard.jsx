@@ -7,7 +7,7 @@ import Reviews from '../../components/Admin/sidebarcompoentns/Reviews';
 import Earnings from '../../components/Admin/sidebarcompoentns/Earnings';
 import Settings from '../../components/Admin/sidebarcompoentns/Settings';
 import DashboardContent from '../../components/Admin/sidebarcompoentns/DashboardContent';
-
+import BookingHistory from '../../components/Admin/sidebarcompoentns/BookingHistory';
 function Dashboard() {
   return (
     <div>
@@ -21,6 +21,8 @@ function Dashboard() {
           <Route path="reviews" element={<Reviews />} />
           <Route path="earnings" element={<Earnings />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="bookings/history" element={<BookingHistory />} />
+
         </Routes>
       </div>
     </div>

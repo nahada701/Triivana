@@ -2,21 +2,21 @@ import React, { useContext, useEffect, useState } from 'react'
 import AddHotel from '../AddHotel'
 import { deleteProperyApi, deleteRoomApi, getAdminHotelsDetailsApi } from '../../../Services/allApi'
 import serverURL from '../../../Services/ServerURL'
-import { addResponseContext, addReviewContext, deleteResponseContext } from '../../../context/ContextApi'
+import { addResponseContext, deleteResponseContext } from '../../../context/ContextApi'
 import { toast } from 'react-toastify'
 
 function ManageListings() {
 
   const{addResponse,setAddResponse}=useContext(addResponseContext)
   const{deleteResponse,setDeleteResponse}=useContext(deleteResponseContext)
-    const{addReview,setAddReview}=useContext(addReviewContext)
   
   const [hotelsWithRoomData,setHotelsWithRoomsData]=useState([])
 console.log(hotelsWithRoomData);
 
+
 useEffect(() => {
  getHotelsAllData()
-}, [addResponse,deleteResponse,addReview])
+}, [addResponse,deleteResponse])
 
 const getHotelsAllData=async()=>{
 
@@ -121,39 +121,22 @@ const handleRoomDelete=async(id)=>{
            <h4 className='mt-5  '>Your listed properties</h4>
      { hotelsWithRoomData?.length>0? 
      hotelsWithRoomData.map(hotel=>(
-      <div className='shadow mb-4 bg-light pb-3 p-3'>
-      <div className=' p-2 row'>
-       <div className="col-lg-6">
-       <img className='mb-2' style={{width:"100%"}} src={`${serverURL}/uploads/${hotel.images[0]}`}
-       alt="" />
-     
-
-       </div>
-       <div className="col-lg-3 gap-2 d-flex flex-column">
-       <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${hotel.images[1]}`}alt="" />
-       <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${hotel.images[2]}`} alt="" />
-
-       </div>
-       <div className="col-lg-3 gap-2 d-flex flex-column">
-       <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${hotel.images[3]}`} alt="" />
-       <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${hotel.images[4]}`} alt="" />
-
-       </div>
-       <h4>{hotel.propertyname}</h4>
-       <h5 className='text-dark'>₹ {hotel?.minPrice}</h5>
-      <div className='d-flex flex-wrap justify-content-between'> 
-
-       <h6>{hotel.place}</h6>
-       <h6>{hotel.phone}</h6>
-       <h6>{hotel.email}</h6>
-
-       </div>
-       <h5>{hotel?.address}</h5>
-     
-
-       <p>{hotel.description}</p>
-
-      </div>
+      <div className='shadow  mb-4 bg-light pb-3 p-3'>
+        <button className={`btn ${hotel.status=="pending" && 'btn-warning' } ${hotel.status=="approved" && 'btn-success' } ${hotel.status=="rejected" && 'btn-danger'} `} >{hotel?.status}</button>
+     <div className="row my-3">
+          <div className="col-md-6 " style={{position:"relative"}}>
+            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%"}} alt="" />
+          </div> 
+          <div className="col-md-3 gap-3 d-flex flex-column ">
+          <img className='mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className='' src={`${serverURL}/uploads/${hotel?.images[2]}`} style={{width:"100%",height:"192px"}} alt="" />
+            
+          </div>
+          <div className="col-md-3 gap-3 d-flex flex-column ">
+          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%",height:"192px"}} alt="" />
+          </div>
+        </div>
       {hotel.amenities.map(amenity => (
 <button className='btn btn-dark mb-2 ms-3 p-1' key={amenity}>{amenity}</button>
 ))}
@@ -168,18 +151,16 @@ hotel.rooms.map(room=>(
  <h6> ({room.numberOfRooms} Rooms)</h6>
 
  <h6 className='text-danger'> ₹ {room.pricePerNight} Per Night</h6>
- <div className="row pb-3">
-   <div className="col-lg-4">
-   <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${room.images[0]}`} alt="" />
-   </div>
-   <div className="col-lg-4">
-   <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${room.images[1]}`} alt="" />
-   </div>
-   <div className="col-lg-4">
-   <img style={{width:"100%"}} className='mb-2' src={`${serverURL}/uploads/${room.images[2]}`} alt="" />
-   </div>
-   
- </div>
+ <div className="row my-3">
+          <div className="col-md-8 " style={{position:"relative"}}>
+            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${room?.images[0]}`} style={{width:"100%"}} alt="" />
+          </div> 
+       
+          <div className="col-md-4 gap-3 d-flex flex-column ">
+          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${room?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%",height:"192px"}} alt="" />
+          </div>
+        </div>
  <p>
    {room.description}
  </p>
@@ -209,7 +190,10 @@ hotel.rooms.map(room=>(
 </div>
      ))
     :
-       <p>No property added yet</p>
+       <div className='text-center'>
+        <img className='img-fluid w-25' src="https://img.freepik.com/free-vector/flat-hotel-review-background_23-2148156492.jpg?t=st=1740416524~exp=1740420124~hmac=c66189622e805bac62d6d04a6b9e6622dd1094ef5c80a1269d2f493d5dd64b51&w=740" alt="" />
+        <h3 className='text-center'><i className='fa-solid fa-x text-danger'></i> No property added yet ! </h3>
+       </div>
        }
    
            

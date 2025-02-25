@@ -154,9 +154,7 @@ useEffect(() => {
     
           <Navbar.Collapse id="basic-navbar-nav" className={isNavbarExpanded ? 'show' : ''}>
             <Nav className="ms-auto">
-              <button className="btn text-light">
-                <i className="fa-solid fa-globe"></i> EN
-              </button>
+              
 {/* Propert listing link */}
               
                <Link to={isAdminLogedin?'/dashboard':'/partner-register'} >
@@ -174,6 +172,8 @@ useEffect(() => {
         
               <Dropdown.Menu>
                 <Dropdown.Item href="#/action-1">{username}</Dropdown.Item>
+                <Dropdown.Item ><Link style={{textDecoration:"none",}} className='text-dark' to={'/savedproperies'}>Saved properties</Link></Dropdown.Item>
+                <Dropdown.Item ><Link style={{textDecoration:"none",}} className='text-dark ' to={'/mybookings'}>Booking History</Link></Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout} >Logout</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

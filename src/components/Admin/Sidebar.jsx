@@ -30,7 +30,7 @@ function Sidebar() {
     <Navbar expand="md" className="bg-dark mb-3">
       <Container fluid>
         <Navbar.Brand>
-          <div className="d-flex align-items-center" >
+          <div className="ms-3 d-flex align-items-center" >
             <Link to="/dashboard" style={{textDecoration:"none"}}>
               <img src={logo} style={{ width: '50px' }} alt="" />
               <span className="fs-2 text-light">Dashboard</span>

@@ -47,7 +47,7 @@ const navigate= useNavigate()
           sessionStorage.setItem("adminToken",result.data.token)
           sessionStorage.setItem("admin",JSON.stringify(result.data.admin))
           setAdminDetails({firstname:"",lastname:"",email:"",password:""})
-          navigate('/dashboard/manage-listings')
+          navigate('/dashboard')
         }
         else if(result.status==404){
           toast.error(result.response.data)
