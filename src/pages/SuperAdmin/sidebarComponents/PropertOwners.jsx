@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getAllOwnersApi } from '../../../Services/allApi'
 import {  } from 'react-router-dom'
+import Spinner from '../../../components/Shared/Spinner'
 
 function PropertOwners() {
 
@@ -78,7 +79,7 @@ function PropertOwners() {
     
                     </table>
                     :
-                    <h3  className='text-center mt-5'>Loading...</h3>
+                    <Spinner/>
 
                     }
                </div>

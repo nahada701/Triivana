@@ -4,6 +4,7 @@ import { getAllHotelsApi, updateHotelStatusApi } from '../../../Services/allApi'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import serverURL from '../../../Services/ServerURL';
+import Spinner from '../../../components/Shared/Spinner';
 function PropertyManagment() {
 
   const [allHotels, setAllHotel] = useState()
@@ -213,7 +214,7 @@ function PropertyManagment() {
 
           </div>
           :
-          <h2 className='text-center mt-5'>Loading...</h2>
+          <Spinner/>
 
       }
 

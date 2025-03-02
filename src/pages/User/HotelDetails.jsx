@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { addReviewApi, getSingleHotelsApi } from '../../Services/allApi';
 import { updateReviewContext } from '../../context/ContextApi';
 import UserNavbar from '../../components/User/UserNavbar';
+import BookingForm from '../../components/User/BookingForm';
 
 const labels = {
 
@@ -35,6 +36,7 @@ function HotelDetails() {
  
   const selectRoomRef=useRef(null)
 
+  const navigate=useNavigate()
 const{updateReview,setUpdateReview}=useContext(updateReviewContext)
 
   const [show, setShow] = useState(false);
@@ -44,7 +46,13 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
   const [showRoom, setShowRoom] = useState(false);
   const handleCloseRoom = () => setShowRoom(false);
   const handleShowRoom = () => setShowRoom(true);
+  
 
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const handleCloseBookingForm = () => setShowBookingForm(false);
+  const handleShowBookingForm = () => setShowBookingForm(true);
+
+  const [selectedRoom,setSelectedRoom]=useState()
   const [value, setValue] = React.useState(0);
   const [hover, setHover] = React.useState(-1);
 
@@ -53,6 +61,7 @@ console.log(review);
 const { id } = useParams();
 console.log(id);
 
+const[isBookingConfirmed,setIsBookingConfirmed]=useState(false)
 
 const[hotel,setHotel]=useState()
 console.log("hotel detials",hotel);
@@ -62,6 +71,10 @@ console.log("hotel detials",hotel);
 useEffect(() => {
 if(id){getHotelDetilas()}
 }, [id,updateReview])
+
+useEffect(() => {
+  handleCloseBookingForm()
+}, [isBookingConfirmed])
 
 const getHotelDetilas=async()=>{
   try{
@@ -122,6 +135,21 @@ const scrollToSelectRoom =()=>{
   }
 }
 
+
+const handleBooking=(room)=>{
+
+  const token=sessionStorage.getItem("userToken")
+  if(token){
+   //open modal
+   handleShowBookingForm()
+   setSelectedRoom(room)
+  }
+  else{
+    toast.warning("Plese login to proceed booking")
+    
+
+  }
+}
   return (
 
   <div className=''>
@@ -218,6 +246,7 @@ const scrollToSelectRoom =()=>{
       <div className="d-none d-lg-grid grid-container bg-light p-2">
         <div>Type</div>
         <div>Photo</div>
+        <div>Occupancy</div>
         <div>Price</div>
         <div>Description</div>
         <div>Amenities</div>
@@ -237,6 +266,8 @@ const scrollToSelectRoom =()=>{
             />
             <button className='btn' onClick={handleShowRoom}> <i className='fa-solid fa-camera'></i> See all photos</button>
           </div>
+          <div><h6 className='ps-3'>  {room?.occupancy} Adults</h6></div>
+
           <div><h6>₹ {room?.pricePerNight}</h6></div>
           <div><p>{room?.description}</p></div>
           <div>
@@ -246,7 +277,7 @@ const scrollToSelectRoom =()=>{
               </span>
             ))}
           </div>
-          <div><button className='btn border-primary'>Book Room</button></div>
+          <div><button className='btn border-primary' onClick={()=>handleBooking(room)} >Book Room</button></div>
     
           
         </div>
@@ -343,6 +374,17 @@ const scrollToSelectRoom =()=>{
           </Modal.Body>
           
         </Modal>
+
+        <Modal size='lg' show={showBookingForm} onHide={handleCloseBookingForm}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Booking</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/*booking form  */}
+          <BookingForm isBookingConfirmed={isBookingConfirmed} setIsBookingConfirmed={setIsBookingConfirmed}  hotel={hotel} room={selectedRoom}/>
+        </Modal.Body>
+
+      </Modal>
       </div>
         <Footer></Footer>
   </div>

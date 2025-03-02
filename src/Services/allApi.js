@@ -76,3 +76,17 @@ export const getAllHotelsApi=async(reqHeader)=>{
 export const updateHotelStatusApi=async(reqBody,reqHeader)=>{
     return await commenApi("PUT",`${serverURL}/update-hotel-status`,reqBody,reqHeader)
 }
+
+export const checkRoomAvailabilityApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/check-room-availability`,reqBody,reqHeader)
+}
+
+
+export const BookRoomApi=async(params,reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/newbooking/${params.hotelId}/${params.roomId}`,reqBody,reqHeader)
+}
+
+
+export const bookingConfirmationEmailApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/booking-confirmation-email`,reqBody,reqHeader)
+}

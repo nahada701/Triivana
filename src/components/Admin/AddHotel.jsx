@@ -9,6 +9,24 @@ import { addResponseContext } from '../../context/ContextApi';
 
 function AddHotel() {
 
+  const cities = [
+    "Port Blair", "Visakhapatnam", "Vijayawada", "Guntur", "Tirupati", "Kurnool", "Nellore",
+    "Itanagar", "Tawang", "Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Patna", "Gaya",
+    "Muzaffarpur", "Bhagalpur", "Raipur", "Bilaspur", "Durg", "Bhilai", "Panaji", "Vasco da Gama",
+    "Margao", "Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar", "Bhavnagar",
+    "Gurgaon", "Faridabad", "Panipat", "Karnal", "Hisar", "Shimla", "Manali", "Dharamshala",
+    "Kullu", "Ranchi", "Jamshedpur", "Dhanbad", "Bangalore", "Mysore", "Mangalore",
+    "Hubli-Dharwad", "Belgaum", "Kochi", "Thiruvananthapuram", "Kozhikode", "Kollam",
+    "Thrissur", "Alappuzha", "Indore", "Bhopal", "Gwalior", "Jabalpur", "Ujjain", "Mumbai",
+    "Pune", "Nagpur", "Nashik", "Aurangabad", "Kolhapur", "Imphal", "Shillong", "Aizawl",
+    "Kohima", "Dimapur", "Bhubaneswar", "Cuttack", "Rourkela", "Puri", "Amritsar", "Ludhiana",
+    "Jalandhar", "Patiala", "Jaipur", "Udaipur", "Jodhpur", "Kota", "Ajmer", "Gangtok",
+    "Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Erode", "Hyderabad",
+    "Warangal", "Agartala", "Lucknow", "Kanpur", "Varanasi", "Agra", "Meerut", "Ghaziabad",
+    "Prayagraj", "Dehradun", "Haridwar", "Nainital", "Rishikesh", "Kolkata", "Howrah",
+    "Darjeeling", "Durgapur", "Asansol"
+  ]
+
   const { addResponse, setAddResponse } = useContext(addResponseContext)
 
   const [step, setStep] = useState(1);
@@ -32,6 +50,7 @@ function AddHotel() {
     setRoomData({
       roomType: '',
       numberOfRooms: '',
+      occupancy:'',
       pricePerNight: '',
       description: "",
       amenities: [],
@@ -67,6 +86,7 @@ function AddHotel() {
   const [roomData, setRoomData] = useState([{
     roomType: '',
     numberOfRooms: '',
+    occupancy:'',
     pricePerNight: '',
     description: "",
     amenities: [],
@@ -166,7 +186,7 @@ function AddHotel() {
 
   //
   const addRoomType = () => {
-    setRoomData([...roomData, { roomType: '', numberOfRooms: '', pricePerNight: '', amenities: [], images: [] }]);
+    setRoomData([...roomData, { roomType: '', numberOfRooms: '',occupancy:'', pricePerNight: '', amenities: [], images: [] }]);
   };
 
   const handleAmenitiesChange = (index, amenity, type) => {
@@ -208,7 +228,7 @@ function AddHotel() {
   const handleSubmitForm = async () => {
     // Check for missing room data
     for (const room of roomData) {
-      if (!room.roomType || !room.numberOfRooms || !room.pricePerNight) {
+      if (!room.roomType || !room.numberOfRooms || !room.occupancy || !room.pricePerNight) {
         toast.warning("Please fill all the room details before submitting.");
         return;
       }
@@ -231,6 +251,7 @@ function AddHotel() {
         const reqBody = new FormData();
         reqBody.append("hotelId", hotelId);
         reqBody.append("roomType", room.roomType);
+        reqBody.append("occupancy", room.occupancy);
         reqBody.append("numberOfRooms", room.numberOfRooms);
         reqBody.append("pricePerNight", room.pricePerNight);
         reqBody.append("description", room.description);
@@ -333,13 +354,12 @@ function AddHotel() {
                 </FloatingLabel>
               </div>
               <div className="col-lg-6">
-                <FloatingLabel
-                  controlId="floatingInput4"
-                  label="Place"
-                  className="mb-3"
-                >
-                  <Form.Control onChange={(e) => setHotelData({ ...hotelData, place: e.target.value })} type="email" placeholder="Email" />
-                </FloatingLabel>
+              <select value={hotelData.place} onChange={(e)=>setHotelData({...hotelData,place:e.target.value})} style={{ height:"55px", outline: "none" }} className="border mb-3 rounded w-100" name="" id="">
+                  <option value="">Place</option>
+                  {cities.sort((a, b) => a.localeCompare(b)).map(city => (
+                    <option value={city}>{city}</option>
+                  ))}
+                </select>
               </div>
               <div className="col-lg-6">
                 <FloatingLabel
@@ -525,6 +545,15 @@ function AddHotel() {
                     </div>
                     <div className="col-lg-6">
                       <FloatingLabel
+                        controlId="floatingInput12"
+                        label="Max Occupancy"
+                        className="mb-3"
+                      >
+                        <Form.Control value={roomData[index].occupancy} onChange={(e) => handleRoomDataChange(index, "occupancy", e)} type="text" placeholder="Occupancy" />
+                      </FloatingLabel>
+                    </div>
+                    <div className="col-12">
+                      <FloatingLabel
                         controlId="floatingInput11"
                         label="Description of Room"
                         className="mb-3"
@@ -532,6 +561,7 @@ function AddHotel() {
                         <Form.Control value={roomData[index].description} onChange={(e) => handleRoomDataChange(index, "description", e)} type="text" placeholder="Description" />
                       </FloatingLabel>
                     </div>
+
                     <label className='ps-3' htmlFor="">
                       Amenities
                     </label>

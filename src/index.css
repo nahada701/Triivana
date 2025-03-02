@@ -54,7 +54,7 @@
   position: relative;
   top: 35vh;
   font-size: 5vw;
-  color: white;
+  color: white !important;
   font-weight: 400;
 
 
@@ -119,6 +119,15 @@
   outline: none;
   padding: 10px 25px;
 }
+.gray-btn{
+  color: white;
+  font-size: 13px;
+  background-color: rgb(109, 109, 109);
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding: 10px 25px;
+}
 
 .destinationIMG{
   width: 100%;
@@ -170,9 +179,10 @@
   display: grid;
   grid-template-rows: max-content;
   flex-wrap: wrap;
-  grid-template-columns: 1fr 2fr 1fr 2fr 3fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr 1fr 2fr 2fr 1fr;
   gap: 10px;
   align-items: center;
+  
 }
 
 @media (max-width: 992px) {
@@ -234,4 +244,7 @@
 }
 .text-light-dark{
   color: rgb(33 37 41 / 88%) !important;
+}
+li{
+  list-style: none;
 }
