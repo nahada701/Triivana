@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import Footer from '../../components/Shared/Footer';
 import { toast } from 'react-toastify';
-import { addReviewApi, getSingleHotelsApi } from '../../Services/allApi';
+import { addReviewApi, getSingleHotelsApi, savePropetyApi } from '../../Services/allApi';
 import { updateReviewContext } from '../../context/ContextApi';
 import UserNavbar from '../../components/User/UserNavbar';
 import BookingForm from '../../components/User/BookingForm';
@@ -80,10 +80,6 @@ const getHotelDetilas=async()=>{
   try{
     const result=await getSingleHotelsApi(id)
     console.log(result,"result");
-
-
-
-    
     if(result.status==200){
       setHotel(result.data)
     }
@@ -100,7 +96,7 @@ const getHotelDetilas=async()=>{
     if(userToken){
    const reqBody={hotelId:hotel?._id,rating:value,comment:review}
    const reqHeader={
-   " Content-Type":"application/json",
+   "Content-Type":"application/json",
    "Authorization":`Bearer ${userToken}`
    }
    try {
@@ -148,6 +144,42 @@ const handleBooking=(room)=>{
     toast.warning("Plese login to proceed booking")
     
 
+  }
+}
+
+const handleSaveProperty=async()=>{
+  const userToken=sessionStorage.getItem("userToken")
+  if(userToken){
+    const reqBody={hotelId:id}
+ const reqHeader={
+ "Content-Type":"application/json",
+ "Authorization":`Bearer ${userToken}`
+ }
+      if(id){
+        console.log(reqBody,reqHeader);
+        
+        try {
+          const result=await savePropetyApi(reqBody,reqHeader)
+          if(result.status==200){
+            toast.success("Property added to saved properties")
+          }
+          else if (result.status==406){
+            toast.warning("Property already saved")
+          }
+          
+        } catch (error) {
+          console.log(error,"error from front end");
+          
+        }
+      }
+      else{
+        console.log("id undefined");
+        
+      }
+   
+  }
+  else{
+    toast.warning("Please login")
   }
 }
   return (
@@ -226,7 +258,7 @@ const handleBooking=(room)=>{
             </div>
             <div className="col-12">
               <button onClick={scrollToSelectRoom} className='w-100 btn btn-primary mt-3'>Reserve</button>
-              <button className='w-100 btn  border-primary mt-3'>
+              <button className='w-100 btn  border-primary mt-3' onClick={handleSaveProperty}>
               <i className='fa-solid fa-heart text-primary'></i>  Save the property
               </button>
   

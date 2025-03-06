@@ -35,6 +35,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
 
   const [isRoomsAvailable, setIsRoomsAvailable] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isBooking,setIsBooking]=useState(false)
 
   const [bookingUserData, setBookingUserData] = useState({ name: "", email: "", phone: "", request: "" })
 
@@ -167,6 +168,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
    
     const userToken = sessionStorage.getItem("userToken")
     if(userToken){
+      setIsBooking(true)
       const reqBody = {
         properytype:hotel.properytype,
         roomType:room.roomType,
@@ -177,7 +179,8 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
         checkInDate, checkOutDate,
         numberOfRooms:numOfRoom,
         numberOfAdults:numOfAdults, 
-        numberOfChildrens:numOfChildren
+        numberOfChildrens:numOfChildren,
+        totalprice:(room.pricePerNight * numOfRoom * numOfDays)
       }
   
       const reqHeader = {
@@ -194,8 +197,10 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
             const emailres=await bookingConfirmationEmailApi(reqBody,reqHeader)
             console.log(emailres);
             if(emailres.status==200){
+              setIsBooking(false)
               toast.success("Room Booked Successfully")
               setIsBookingConfirmed(!isBookingConfirmed)
+
 
             }
             else{
@@ -351,7 +356,10 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
                     <input value={bookingUserData.request} onChange={(e) => setBookingUserData({ ...bookingUserData, request: e.target.value })} type="text" className="form-control mb-3" placeholder="Special request (any)" />
                   </div>
                 </div>
-                <div className="d-flex justify-content-center"><button className="w-100 black-btn" onClick={handleBookingRoom}>Confirm Booking</button></div>
+                <div className="d-flex justify-content-center"><button className="w-100 black-btn" onClick={handleBookingRoom}>
+                  {isBooking?
+                  <Spinner/>
+                  :"Confirm Booking"}</button></div>
               </div>
             )
           }

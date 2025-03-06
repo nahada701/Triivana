@@ -90,3 +90,31 @@ export const BookRoomApi=async(params,reqBody,reqHeader)=>{
 export const bookingConfirmationEmailApi=async(reqBody,reqHeader)=>{
     return await commenApi("POST",`${serverURL}/booking-confirmation-email`,reqBody,reqHeader)
 }
+
+export const savePropetyApi=async(reqBody,reqHeader)=>{
+    return await commenApi("PUT",`${serverURL}/save-property`,reqBody,reqHeader)
+}
+
+export const getUserSavedPropetyApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/user/saved-properties`,"",reqHeader)
+}
+
+export const deleteUserSavedPropetyApi=async(hotelId,reqHeader)=>{
+    return await commenApi("DELETE",`${serverURL}/remove/hotel/${hotelId}`,{},reqHeader)
+}
+
+export const getAlluserBookingsApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/get-user-bookings`,{},reqHeader)
+}
+
+export const cancelBookingsApi=async(bookingId,reqHeader)=>{
+    return await commenApi("PUT",`${serverURL}/cancel-booking/${bookingId}`,{},reqHeader)
+}
+
+export const dashboardDataApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/super-admin-dashboard`,"",reqHeader)
+}
+
+export const getAllUsersApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/get-all-users`,"",reqHeader)
+}

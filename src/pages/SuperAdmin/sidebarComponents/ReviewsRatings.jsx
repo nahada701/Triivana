@@ -63,15 +63,15 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
     }
     return (
         <div>
-            <h3 className='text-center'>Review requests</h3>
             <div className='row'>
+            <h3 className='text-center'>Review requests</h3>
 
-                {pendingReviews?.length > 0 &&
+                {pendingReviews?.length > 0 ?
                     pendingReviews.map(review => (
                         <div className="col-lg-3 mb-3">
                             <div className="card p-2">
-                                <h6 style={{ fontSize: "15px" }}>{review?.hotelId.propertyname}</h6>
-                                <h6 className='p-0 m-0'>{review?.userId.name}</h6>
+                                <h6 style={{ fontSize: "15px" }}>{review?.hotelId?.propertyname}</h6>
+                                <h6 className='p-0 m-0'>{review?.userId?.name? name:""}</h6>
                                 <span style={{ fontSize: "14px" }}>{review?.createdAt.split("T")[0]}</span>
                                 <h6>
                                     {Array.from({ length: review?.rating }).map((_, i) => (
@@ -89,8 +89,10 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
                                 </div>
 
                             </div>
-                        </div>
+                        </div>   
                     ))
+                    :
+                    <p className='text-center my-2 text-danger'>No new Reviews! </p>
                 }
             </div>
 
@@ -115,8 +117,8 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
                                 approvedReviews.map((review, index) => (
                                     <tr>
                                         <td>{index + 1}</td>
-                                        <td>{review?.hotelId.propertyname}</td>
-                                        <td>{review?.userId.name} </td>
+                                        <td>{review?.hotelId?.propertyname}</td>
+                                        <td>{review?.userId?.name} </td>
                                         <td>{review?.comment}</td>
                                         <td>{review?.rating}</td>
                                     </tr>

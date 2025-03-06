@@ -1,33 +1,45 @@
-import React from 'react'
+import React ,{useEffect, useState} from 'react'
 import { Container } from "react-bootstrap";
 import BookingCard from '../../components/User/BookingCard';
 import UserNavbar from '../../components/User/UserNavbar';
+import { getAlluserBookingsApi } from '../../Services/allApi';
 
 function MyBookings() {
-  const bookings = [
-    {
-      hotelName: "The Grand Palace",
-      hotelImage: "https://source.unsplash.com/200x200/?hotel",
-      checkInDate: "2025-03-10",
-      checkOutDate: "2025-03-15",
-      roomType: "Deluxe Room",
-      price: 7500,
-      paymentStatus: "Paid",
-      status: "Confirmed",
-      bookingId: "BKG123456",
-    },
-    {
-      hotelName: "Ocean View Resort",
-      hotelImage: "https://source.unsplash.com/200x200/?beach,hotel",
-      checkInDate: "2025-04-01",
-      checkOutDate: "2025-04-05",
-      roomType: "Suite",
-      price: 12000,
-      paymentStatus: "Pending",
-      status: "Pending",
-      bookingId: "BKG789012",
-    },
-  ];
+ const [bookings,setBookings]=useState([])
+ 
+ const [canceled,setCanceled]=useState()
+console.log(bookings);
+
+ useEffect(() => {
+  getAlluserBookings()
+ }, [canceled])
+
+ const getAlluserBookings=async()=>{
+  const userToken=sessionStorage.getItem("userToken")
+  if(userToken){
+    const reqHeader={
+      "Authorization":`Bearer ${userToken}`,
+      "Content-Type":"application/json"
+    }
+    try{
+
+      const result=await getAlluserBookingsApi(reqHeader)
+      const hotelArray=[]
+      result.data.forEach(hotel=>{
+        hotelArray.push(hotel)
+     })
+
+      setBookings(hotelArray)
+ console.log(bookings);
+      
+      
+    }catch(err){
+      console.log(err);
+      
+    }
+  }
+ }
+ 
   return (
     <div>
       <div className="bg-dark">
@@ -37,7 +49,7 @@ function MyBookings() {
        <Container className="mt-4">
       <h2 className="mb-4">My Bookings</h2>
       {bookings.map((booking, index) => (
-        <BookingCard key={index} booking={booking} />
+        <BookingCard canceled={canceled} setCanceled={setCanceled} key={index} booking={booking} />
       ))}
     </Container>
     </div>
