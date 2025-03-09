@@ -4,6 +4,7 @@ import React, { useState, useTransition } from 'react'
 import { useEffect } from 'react'
 import { Bar, Doughnut, Line, Pie } from 'react-chartjs-2'
 import { dashboardDataApi } from '../../../Services/allApi'
+import Spinner from '../../../components/Shared/Spinner'
 
 
 
@@ -80,7 +81,7 @@ function DashboardSuperAdmin() {
         datasets: [{
 
             data: numOfPropertyType,
-            backgroundColor: ["#0a64f5", "#7ba7ed", "navy", "black"]
+            backgroundColor: ["#0a64f5", "#7ba7ed", "navy", "black","#7f75eb"]
 
         }]
     }
@@ -153,6 +154,8 @@ const getData=async()=>{
             <div className="pb-5  pt-3">
                 <div className="">
 
+                   {     numOfUsers&&numOfProperties&&numOfBookings&&monthlyUsers&&userMonths&&monthlyBookings&&numOfPropertyType&&propertyTypes?
+                   
                     <div className='charts row '>
                         <div className='col-md-6'><Line data={LineData} options={LineOptions}></Line></div>
                         <div className='col-md-6 '><Bar style={{ width: "33%", height: "300px" }} data={BarData} options={barOptions} /></div>
@@ -175,6 +178,9 @@ const getData=async()=>{
                         </div>
 
                     </div>
+                    :
+                    <Spinner/>
+                    }
                 </div>
             </div>
         </div>

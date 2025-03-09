@@ -25,7 +25,8 @@ const getHotelsAllData=async()=>{
   
   if(token){
     const reqHeader={
-      "Authorization":`Bearer ${token}`
+      "Authorization":`Bearer ${token}`,
+      "Content-Type":"application/json"
     }
       try {
 
@@ -122,24 +123,29 @@ const handleRoomDelete=async(id)=>{
      { hotelsWithRoomData?.length>0? 
      hotelsWithRoomData.map(hotel=>(
       <div className='shadow  mb-4 bg-light pb-3 p-3'>
-        <button className={`btn ${hotel.status=="pending" && 'btn-warning' } ${hotel.status=="approved" && 'btn-success' } ${hotel.status=="rejected" && 'btn-danger'} `} >{hotel?.status}</button>
+        <div className='d-flex justify-content-between'>
+          <h3>{hotel.propertyname}</h3>
+          <h5 className={`fw-bold  ${hotel.status=="pending" && 'text-warning' } ${hotel.status=="approved" && 'text-success' } ${hotel.status=="rejected" && 'text-danger'} `} >{hotel?.status}</h5>
+        </div>
      <div className="row my-3">
           <div className="col-md-6 " style={{position:"relative"}}>
-            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%"}} alt="" />
+            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%"}} alt="" />
           </div> 
           <div className="col-md-3 gap-3 d-flex flex-column ">
-          <img className='mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className='mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
           <img className='' src={`${serverURL}/uploads/${hotel?.images[2]}`} style={{width:"100%",height:"192px"}} alt="" />
             
           </div>
           <div className="col-md-3 gap-3 d-flex flex-column ">
-          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
-          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%",height:"192px"}} alt="" />
           </div>
         </div>
       {hotel.amenities.map(amenity => (
 <button className='btn btn-dark mb-2 ms-3 p-1' key={amenity}>{amenity}</button>
+
 ))}
+<p>{hotel?.description}</p>
 
 <div className="p-4 ">
 <h4>Rooms</h4>
@@ -151,27 +157,33 @@ hotel.rooms.map(room=>(
  <h6> ({room.numberOfRooms} Rooms)</h6>
 
  <h6 className='text-danger'> ₹ {room.pricePerNight} Per Night</h6>
- <div className="row my-3">
-          <div className="col-md-8 " style={{position:"relative"}}>
-            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${room?.images[0]}`} style={{width:"100%"}} alt="" />
-          </div> 
-       
-          <div className="col-md-4 gap-3 d-flex flex-column ">
-          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${room?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
-          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%",height:"192px"}} alt="" />
-          </div>
-        </div>
- <p>
-   {room.description}
- </p>
- {room.amenities.map(amenity => (
-<button className='btn btn-light me-3 px-2 py-1' key={amenity}>{amenity}</button>
-
-))}
-<div className="d-flex justify-content-end">
-<button className='btn btn-danger' onClick={()=>handleRoomDelete(room?._id)}>Delete</button>
-<button className='btn btn-light ms-3'>Edit</button>
-
+<div className='row'>
+  <div className='col-md-7'>
+     <div className="row mb-3">
+              <div className="col-md-8 " style={{position:"relative"}}>
+                <img className='firstImg mt-md-0' src={`${serverURL}/uploads/${room?.images[2]}`} style={{width:"100%"}} alt="" />
+              </div> 
+           
+              <div className="col-md-4 gap-3 d-flex flex-column ">
+              <img className="rightTop  mt-md-0" src={`${serverURL}/uploads/${room?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
+              <img className="rightBottom " src={`${serverURL}/uploads/${room?.images[0]}`} style={{width:"100%",height:"192px"}} alt="" />
+              </div>
+            </div>
+  </div>
+  <div className='col-md-5'>
+     <p>
+       {room.description}
+     </p>
+     {room.amenities.map(amenity => (
+    <button className='btn btn-light me-3 px-2 py-1' key={amenity}>{amenity}</button>
+    
+    ))}
+    <div className="d-flex justify-content-end">
+    <button className='btn btn-danger' onClick={()=>handleRoomDelete(room?._id)}>Delete</button>
+    <button className='btn btn-light ms-3'>Edit</button>
+    
+    </div>
+  </div>
 </div>
 
 </div>

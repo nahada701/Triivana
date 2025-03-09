@@ -214,17 +214,17 @@ const handleSaveProperty=async()=>{
       </div>
         <div className="row mt-3">
           <div className="col-md-6 " style={{position:"relative"}}>
-            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%"}} alt="" />
+            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%"}} alt="" />
             <button onClick={handleShow} className='btn border border-primary text-primary bg-light ' style={{position:"absolute" ,right:"5%",bottom:"2%"}}> <i className='fa-solid fa-camera text-primary'></i> See all photos</button>
           </div> 
           <div className="col-md-3 gap-3 d-flex flex-column ">
-          <img className='mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className='mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
           <img className='' src={`${serverURL}/uploads/${hotel?.images[2]}`} style={{width:"100%",height:"192px"}} alt="" />
             
           </div>
           <div className="col-md-3 gap-3 d-flex flex-column ">
-          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
-          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
+          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%",height:"192px"}} alt="" />
           </div>
         </div>
   
@@ -292,7 +292,7 @@ const handleSaveProperty=async()=>{
           <div><h6>{room?.roomType}</h6></div>
           <div>
             <img
-              src={`${serverURL}/uploads/${room?.images[0]}`}
+              src={`${serverURL}/uploads/${room?.images[2]}`}
               style={{ width: "100%", height: "200px", objectFit: "cover" }}
               alt="Room"
             />

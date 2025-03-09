@@ -118,3 +118,22 @@ export const dashboardDataApi=async(reqHeader)=>{
 export const getAllUsersApi=async(reqHeader)=>{
     return await commenApi("GET",`${serverURL}/get-all-users`,"",reqHeader)
 }
+
+
+export const getUserDetailsApi=async(userId,reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/user/booking/${userId}`,"",reqHeader)
+}
+
+
+export const banUserApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/banuser`,reqBody,reqHeader)
+}
+
+export const unbanUserApi=async(userId,reqHeader)=>{
+    return await commenApi("PUT",`${serverURL}/unban/user/${userId}`,{},reqHeader)
+}
+
+
+export const getPropertyDashboardDataApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/propery-owner/dashboard`,{},reqHeader)
+}

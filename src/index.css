@@ -248,3 +248,12 @@
 li{
   list-style: none;
 }
+.cards{
+  border-radius: 10px;
+  background-color: blue;
+  
+}
+.cards:hover{
+  cursor: pointer;
+  background-color: #000000;
+}
