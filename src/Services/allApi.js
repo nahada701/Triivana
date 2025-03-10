@@ -137,3 +137,19 @@ export const unbanUserApi=async(userId,reqHeader)=>{
 export const getPropertyDashboardDataApi=async(reqHeader)=>{
     return await commenApi("GET",`${serverURL}/propery-owner/dashboard`,{},reqHeader)
 }
+
+export const getupcomingBookingsApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/property-owner-upcoming-bookings`,{},reqHeader)
+}
+
+export const sendCancellationMailApi=async(reqBody,reqHeader)=>{
+    return await commenApi("POST",`${serverURL}/cancellation-mail`,reqBody,reqHeader)
+}
+
+export const updatePaymentApi=async(bookingId,reqBody,reqHeader)=>{
+    return await commenApi("PUT",`${serverURL}/update-payment/${bookingId}`,reqBody,reqHeader)
+}
+
+export const settlePaymentApi=async(bookingId,reqHeader)=>{
+    return await commenApi("PUT",`${serverURL}/settle-payment/${bookingId}`,{},reqHeader)
+}
