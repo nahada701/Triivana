@@ -1,15 +1,53 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { bookingHistoryApi } from '../../../Services/allApi'
 
 function BookingHistory() {
+    const [bookingHistory,setBookingHistory]=useState()
+    const [filteredBookingHistory,setFilteredBookingHistory]=useState()
+    const [guestName,setGuestName]=useState()
+
+
+    useEffect(() => {
+     getBookingHistory()
+    }, [])
+
+
+    
+    const getBookingHistory=async()=>{
+        const token = sessionStorage.getItem("adminToken")
+        if (token) {
+            const reqHeader = {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+            const result=await bookingHistoryApi(reqHeader)
+            console.log(result);
+            if(result.status==200){
+                setBookingHistory(result.data)
+                setFilteredBookingHistory(result.data)
+
+            }
+        }
+    }
+
+    const handleSearch=(e)=>{
+      
+        const filteredBooking=bookingHistory?.filter((booking)=>{
+          return  booking?.name?.toLowerCase().includes((e.target.value).toLowerCase())
+        })
+        setFilteredBookingHistory(filteredBooking)
+    }
+    
   return (
     <div>
         <div className='container'>
             <Link className='text-dark text-decoration-none' to={'/dashboard/bookings'}> <i className='fa-solid fa-arrow-left'></i> Back</Link>
             <div className='d-flex my-4 justify-content-between'>
                 <h3>Booking history</h3>
-                <input type="text"  className='w-25 form-control' placeholder='Search By Guest Name' name="" id="" />
+                <input onChange={(e)=>handleSearch(e)} type="text"  className='w-25 form-control' placeholder='Search By Guest Name' name="" id="" />
                 </div>
+          {filteredBookingHistory?.length>0?
             <table className='table'>
                 <thead>
                     <tr>
@@ -19,7 +57,7 @@ function BookingHistory() {
                         <th>Guests</th>
                         <th>Check in</th>
                         <th>Check out</th>
-                        <th>Remark</th>
+                        <th>Phone</th>
                         <th>Status</th>
                         <th>Payment</th>
     
@@ -27,21 +65,27 @@ function BookingHistory() {
                     </tr>           
                 </thead>
                 <tbody>
+               { filteredBookingHistory?.map((booking,index)=>(
                 <tr>
-                        <td>1</td>
-                        <td>Hotl amax</td>
-                        <td>Double</td>
-                        <td>Amin ahashan, Nahada</td>
-                        <td>10/10/2024</td>
-                        <td>11/10/2024</td>
-                        <td>Made fractures paid $40</td>
-                        <td className="text-success fw-bold">Checkout</td>
-                        <td className="text-success fw-bold">Fully paid</td>
+                        <td>{index+1}</td>
+                        <td>{booking?.propertyname}</td>
+                        <td>{booking?.roomType}</td>
+                        <td>{booking?.name}</td>
+                        <td>{booking?.checkInDate.split("T")[0]}</td>
+                        <td>{booking?.checkOutDate.split("T")[0]}</td>
+                        <td>{booking?.phone}</td>
+                        <td className={`${booking?.status=="confirmed"?"text-success":"text-danger"} fw-bold`} >{booking?.status=="confirmed"?"CheckedOut":"Cancelled"}</td>
+                        <td className={` fw-bold ${booking?.paymentMade>=booking?.totalprice?"text-success":"text-danger"}`}>{booking?.paymentMade==booking?.totalprice?"Paid":booking?.paymentMade-booking?.totalprice}</td>
     
     
-                    </tr>    
+                    </tr> 
+               )) }   
                 </tbody>
             </table>
+            :
+            <h4 className='text-center my-5 py-5'>No Customer found</h4>
+
+            }
         </div>
     </div>
   )

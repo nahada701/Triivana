@@ -7,7 +7,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { bookingConfirmationEmailApi, BookRoomApi, checkRoomAvailabilityApi } from "../../Services/allApi";
 import { toast } from "react-toastify";
-import { Spinner } from "react-bootstrap";
+
+import BeatLoader from '../../components/Shared/BeatLoader';
 
 function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
   // Get room and hotel data
@@ -333,7 +334,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
         <div className="d-flex  mt-4 justify-content-center">
           <button className=" gray-btn" onClick={handleRoomAvailability}>{
             isLoading ?
-              <Spinner />
+              <BeatLoader />
               : "Check Availability"}</button>
         </div>
 
@@ -358,7 +359,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
                 </div>
                 <div className="d-flex justify-content-center"><button className="w-100 black-btn" onClick={handleBookingRoom}>
                   {isBooking?
-                  <Spinner/>
+                  <BeatLoader/>
                   :"Confirm Booking"}</button></div>
               </div>
             )

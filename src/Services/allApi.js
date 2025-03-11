@@ -153,3 +153,10 @@ export const updatePaymentApi=async(bookingId,reqBody,reqHeader)=>{
 export const settlePaymentApi=async(bookingId,reqHeader)=>{
     return await commenApi("PUT",`${serverURL}/settle-payment/${bookingId}`,{},reqHeader)
 }
+
+export const bookingHistoryApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/admin-booking-history`,{},reqHeader)
+}
+export const propertyOwnerReviewsApi=async(reqHeader)=>{
+    return await commenApi("GET",`${serverURL}/reviews-admin`,{},reqHeader)
+}

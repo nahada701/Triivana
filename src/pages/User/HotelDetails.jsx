@@ -13,6 +13,8 @@ import { addReviewApi, getSingleHotelsApi, savePropetyApi } from '../../Services
 import { updateReviewContext } from '../../context/ContextApi';
 import UserNavbar from '../../components/User/UserNavbar';
 import BookingForm from '../../components/User/BookingForm';
+import BeatLoader from '../../components/Shared/BeatLoader';
+
 
 const labels = {
 
@@ -57,6 +59,8 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
   const [hover, setHover] = React.useState(-1);
 
   const [review,setReview]=useState("")
+
+  const[addingReview,setAddingReview]=useState(false)
 console.log(review);
 const { id } = useParams();
 console.log(id);
@@ -93,6 +97,7 @@ const getHotelDetilas=async()=>{
 
   const handleReviewSubmit=async()=>{
     const userToken=sessionStorage.getItem("userToken")
+    setAddingReview(true)
     if(userToken){
    const reqBody={hotelId:hotel?._id,rating:value,comment:review}
    const reqHeader={
@@ -105,8 +110,10 @@ const getHotelDetilas=async()=>{
     console.log(result);
     
     if(result.status==200){
+      setAddingReview(false)
       toast.success("Thanks for the honest review")
       setReview("")
+      setValue(5)
       setUpdateReview(result.data)
      
     }
@@ -321,8 +328,8 @@ const handleSaveProperty=async()=>{
     <div className="row">
       {
         hotel?.reviews?.filter(review=>review.status=="approved").map(review=>(
-  <div className="col-md-3 mb-3">
-        <div className="card p-3">
+  <div className="col-md-3 mb-3 d-flex">
+        <div className="card p-3 d-flex flex-column w-100">
           <h6>{review.userId?.name} </h6>
           <span>{review.createdAt.split("T")[0]}</span>
           <h6>
@@ -330,7 +337,7 @@ const handleSaveProperty=async()=>{
             <i className='fa-solid fa-star text-warning'></i>
            ))}
           </h6>
-            <p>{review.comment}</p>
+            <p className='flex-grow-1'>{review.comment}</p>
     
         </div>
       </div>
@@ -362,7 +369,7 @@ const handleSaveProperty=async()=>{
           )}
         </Box>
     <textarea value={review} onChange={(e)=>setReview(e.target.value)} name="" style={{minHeight:"150px"}} className='input form-control' placeholder='Write your review here...' id=""></textarea>
-    <button onClick={handleReviewSubmit} className='black-btn mt-3 text-end '> Submit</button>
+    <button onClick={handleReviewSubmit} className='black-btn mt-3 text-end '>  {addingReview?<BeatLoader></BeatLoader>:"Submit"}</button>
     </div>
           </div>
         </section>
