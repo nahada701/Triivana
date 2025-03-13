@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -6,9 +6,13 @@ import Form from 'react-bootstrap/Form';
 import { addHotelApi, addRoomsApi } from '../../Services/allApi';
 import { toast } from 'react-toastify';
 import { addResponseContext } from '../../context/ContextApi';
+import axios from 'axios';
 
 function AddHotel() {
 
+  
+  
+  
   const cities = [
     "Port Blair", "Visakhapatnam", "Vijayawada", "Guntur", "Tirupati", "Kurnool", "Nellore",
     "Itanagar", "Tawang", "Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Patna", "Gaya",
@@ -393,53 +397,13 @@ function AddHotel() {
               <div id='group1' className="col-lg-12 mb-3 ps-3" key="inline-checkbox" >
 
                 {[
-                  // General Hotel Services
-                  "Free WiFi", "24/7 Front Desk", "Concierge Service", "Luggage Storage",
-                  "Express Check-in/Check-out", "Security (CCTV, Guards, Key Card Access)",
-                  "Daily Housekeeping", "Laundry Service", "Dry Cleaning", "Elevator",
-                  "Wheelchair Accessibility", "Parking (Free/Paid)", "Valet Parking",
-                  "Multi-Language Staff", "Smoking/Non-Smoking Areas",
-
-                  // Food & Beverage
-                  "In-House Restaurant", "Bar/Lounge", "Breakfast Included",
-                  "Buffet & A La Carte Options", "24/7 Room Service", "Coffee Shop",
-                  "Poolside Bar", "Wine Tasting", "Afternoon Tea Service",
-
-                  // Business & Conference Facilities
-                  "Business Center", "Meeting Rooms", "Conference Halls",
-                  "Co-Working Space", "Printing & Fax Services", "High-Speed Internet",
-                  "Projector & AV Equipment",
-
-                  // Wellness & Fitness
-                  "Spa & Wellness Center", "Massage Services", "Sauna & Steam Room",
-                  "Jacuzzi", "Yoga & Meditation Area", "Beauty Salon", "Gym/Fitness Center",
-                  "Personal Trainer Availability",
-
-                  // Entertainment & Recreation
-                  "Swimming Pool (Indoor/Outdoor)", "Kids' Pool", "Movie Theatre",
-                  "Gaming Zone", "Live Music/Entertainment", "Casino", "Library",
-                  "Art Gallery", "Virtual Golf Simulator",
-
-                  // Outdoor & Adventure
-                  "Private Beach Access", "Water Sports (Jet Skiing, Kayaking, etc.)",
-                  "Diving & Snorkeling", "Hiking & Nature Trails", "Tennis Court",
-                  "Basketball Court", "Golf Course", "Horse Riding",
-
-                  // Family & Kids-Friendly
-                  "Kids' Play Area", "Babysitting Services", "Family Suites",
-                  "Child-Friendly Pool", "Children’s Activity Programs",
-
-                  // Pet-Friendly Services
-                  "Pet-Friendly Rooms", "Pet Grooming & Daycare", "Pet Walking Services",
-                  "Pet-Friendly Dining Areas",
-
-                  // Transportation & Travel Services
-                  "Airport Shuttle", "Car Rental Service", "Bicycle Rentals",
-                  "Tour Desk & Excursions", "EV Charging Stations",
-
-                  // Eco-Friendly Initiatives
-                  "Solar Power Usage", "Water Recycling System", "Organic Toiletries",
-                  "Smart Energy Management",
+                   "Free WiFi", "24/7 Front Desk", "Luggage Storage", "Security",
+                   "Daily Housekeeping", "Laundry Service", "Elevator", "Parking",
+                   "Restaurant & Bar", "Breakfast Included", "Room Service", "Coffee Shop",
+                   "Business Center", "Meeting Rooms", "High-Speed Internet",
+                   "Spa", "Gym", "Swimming Pool", "Kids' Play Area",
+                   "Live Entertainment", "Movie Theatre", "Airport Shuttle", "Car Rental",
+                   "Eco-Friendly"
                 ].map((amenity, i) => (
                   <Button
                     key={i}
@@ -517,11 +481,14 @@ function AddHotel() {
                     </div>
                     <div className="col-lg-6">
                       <Form.Select value={roomData[index].roomType} onChange={(e) => handleRoomDataChange(index, "roomType", e)} className='mb-3' style={{ height: "58px" }} aria-label="Default select example">
-                        <option>Room type</option>
-                        <option value="Single">Single</option>
-                        <option value="Double">Double</option>
-                        <option value="Suite">Suite</option>
-                        <option value="Deluxe">Deluxe</option>
+                      <option>Room type</option>
+                      <option value="Single">Single</option>
+                      <option value="Double">Double</option>
+                      <option value="Suite">Suite</option>
+                      <option value="Deluxe">Deluxe</option>
+                      <option value="Twin">Twin</option>
+                      <option value="King">King</option>
+                      <option value="Queen">Queen</option>
 
                       </Form.Select>
                     </div>
@@ -568,29 +535,10 @@ function AddHotel() {
                     <div id='group1' className="col-lg-12 mb-3 ps-3"  >
 
                       {[
-                        // Basic Room Features
-                        "Private Balcony/Terrace", "Air Conditioning", "Heating", "Soundproofing",
-                        "Smart TV", "Cable/Satellite TV", "Free WiFi", "Mini-Bar", "Refrigerator",
-                        "Coffee/Tea Maker", "Microwave", "Dining Table", "Work Desk & Chair",
-
-                        // Comfort & Convenience
-                        "Safe Locker", "Iron/Ironing Board", "Wardrobe/Closet", "Blackout Curtains",
-                        "In-Room Dining", "Sofa Bed", "Extra Bed on Request", "Reading Lamps",
-
-                        // Bathroom Amenities
-                        "Ensuite Bathroom", "Bathtub", "Jacuzzi", "Rain Shower",
-                        "Heated Bathroom Floors", "Complimentary Toiletries", "Hair Dryer",
-                        "Bathrobes & Slippers", "Bidet", "Toothbrush & Razor Kit",
-
-                        // Premium & Luxury Features
-                        "In-Room Butler Service", "Personalized Pillow Menu", "Smart Room Controls",
-                        "Alexa/Google Assistant Integration", "Floor-to-Ceiling Windows",
-                        "Panoramic City/Ocean View", "Private Pool/Villa Access",
-
-                        // Technology & Smart Features
-                        "Voice-Controlled Room Automation", "Wireless Phone Charging",
-                        "Bluetooth Speaker System", "Mood Lighting Control", "Digital Room Key",
-                        "Smart Mirror with TV Display", "Automated Curtains",
+                     "Balcony", "Air Conditioning", "Heating", "Smart TV", "Free WiFi",
+                     "Mini-Bar", "Refrigerator", "Coffee Maker", "Microwave", "Work Desk",
+                     "Safe", "Wardrobe", "Blackout Curtains", "Ensuite Bathroom",
+                     "Bathtub", "Rain Shower", "Toiletries", "Hair Dryer", "Digital Key"
                       ].map((amenity, i) => (
                         <Button
                           key={i}

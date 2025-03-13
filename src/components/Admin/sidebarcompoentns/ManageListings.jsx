@@ -2,13 +2,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import AddHotel from '../AddHotel'
 import { deleteProperyApi, deleteRoomApi, getAdminHotelsDetailsApi } from '../../../Services/allApi'
 import serverURL from '../../../Services/ServerURL'
-import { addResponseContext, deleteResponseContext } from '../../../context/ContextApi'
+import { addResponseContext, deleteResponseContext, editHotelResponseContext, editRoomResponseContext } from '../../../context/ContextApi'
 import { toast } from 'react-toastify'
+import EditHotel from '../EditHotel'
+import EditRoom from '../EditRoom'
 
 function ManageListings() {
 
   const{addResponse,setAddResponse}=useContext(addResponseContext)
   const{deleteResponse,setDeleteResponse}=useContext(deleteResponseContext)
+  const { editHotelResponse,setEditHotelResponse } = useContext(editHotelResponseContext)
+  const {editRoomResponse,setEditRoomResponse}=useContext(editRoomResponseContext)
   
   const [hotelsWithRoomData,setHotelsWithRoomsData]=useState([])
 console.log(hotelsWithRoomData);
@@ -16,7 +20,7 @@ console.log(hotelsWithRoomData);
 
 useEffect(() => {
  getHotelsAllData()
-}, [addResponse,deleteResponse])
+}, [addResponse,deleteResponse,editHotelResponse,editRoomResponse])
 
 const getHotelsAllData=async()=>{
 
@@ -112,6 +116,10 @@ const handleRoomDelete=async(id)=>{
 
   }
 }
+
+const handleEditProperty=async(id)=>{
+
+}
   return (
     <div>
        <div className='container'>
@@ -119,35 +127,39 @@ const handleRoomDelete=async(id)=>{
 
            {/* hotels list here     */}
 
-           <h4 className='mt-5  '>Your listed properties</h4>
+           <h4 className='mt-5  '>Your listed properties ({hotelsWithRoomData.length})</h4>
      { hotelsWithRoomData?.length>0? 
      hotelsWithRoomData.map(hotel=>(
-      <div className='shadow  mb-4 bg-light pb-3 p-3'>
+      <div className='shadow  mb-4 bg-light pb-3 p-5'>
         <div className='d-flex justify-content-between'>
           <h3>{hotel.propertyname}</h3>
           <h5 className={`fw-bold  ${hotel.status=="pending" && 'text-warning' } ${hotel.status=="approved" && 'text-success' } ${hotel.status=="rejected" && 'text-danger'} `} >{hotel?.status}</h5>
         </div>
      <div className="row my-3">
-          <div className="col-md-6 " style={{position:"relative"}}>
-            <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%"}} alt="" />
-          </div> 
-          <div className="col-md-3 gap-3 d-flex flex-column ">
-          <img className='mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"192px"}} alt="" />
-          <img className='' src={`${serverURL}/uploads/${hotel?.images[2]}`} style={{width:"100%",height:"192px"}} alt="" />
-            
-          </div>
-          <div className="col-md-3 gap-3 d-flex flex-column ">
-          <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
-          <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%",height:"192px"}} alt="" />
-          </div>
+       <div className='col-md-6 row g-1'>
+            <div className="col-md-6  " style={{position:"relative"}}>
+              <img className='firstImg mt-3 mt-md-0' src={`${serverURL}/uploads/${hotel?.images[4]}`} style={{width:"100%",height:"300px"}} alt="" />
+            </div> 
+            <div className="col-md-3 gap-1 d-flex flex-column ">
+            <img className='mt-3  mt-md-0' src={`${serverURL}/uploads/${hotel?.images[3]}`} style={{width:"100%",height:"148px"}} alt="" />
+            <img className='' src={`${serverURL}/uploads/${hotel?.images[2]}`} style={{width:"100%",height:"148px"}} alt="" />
+              
+            </div>
+            <div className="col-md-3 gap-1 d-flex flex-column ">
+            <img className="rightTop mt-3 mt-md-0" src={`${serverURL}/uploads/${hotel?.images[1]}`} style={{width:"100%",height:"148px"}} alt="" />
+            <img className="rightBottom " src={`${serverURL}/uploads/${hotel?.images[0]}`} style={{width:"100%",height:"148px"}} alt="" />
+            </div>
+       </div>
+<div className='col-md-6'>
+        {hotel.amenities.map(amenity => (
+  <span style={{fontSize:"15px"}}  className='fw-bold mb-2 me-3 p-1' key={amenity}> <i className='fa-solid fa-check text-success'></i> {amenity}</span>
+  
+  ))}
+  <p style={{fontSize:"15px"}} >{hotel?.description}</p>
+</div>
         </div>
-      {hotel.amenities.map(amenity => (
-<button className='btn btn-dark mb-2 ms-3 p-1' key={amenity}>{amenity}</button>
 
-))}
-<p>{hotel?.description}</p>
-
-<div className="p-4 ">
+<div className="p-1 ">
 <h4>Rooms</h4>
 
 {hotel.rooms.length>0?
@@ -159,28 +171,29 @@ hotel.rooms.map(room=>(
  <h6 className='text-danger'> ₹ {room.pricePerNight} Per Night</h6>
 <div className='row'>
   <div className='col-md-7'>
-     <div className="row mb-3">
+     <div className="row g-1 mb-3">
               <div className="col-md-8 " style={{position:"relative"}}>
-                <img className='firstImg mt-md-0' src={`${serverURL}/uploads/${room?.images[2]}`} style={{width:"100%"}} alt="" />
+                <img className='firstImg mt-md-0' src={`${serverURL}/uploads/${room?.images[2]}`} style={{width:"100%",height:"300px"}} alt="" />
               </div> 
            
-              <div className="col-md-4 gap-3 d-flex flex-column ">
-              <img className="rightTop  mt-md-0" src={`${serverURL}/uploads/${room?.images[1]}`} style={{width:"100%",height:"192px"}} alt="" />
-              <img className="rightBottom " src={`${serverURL}/uploads/${room?.images[0]}`} style={{width:"100%",height:"192px"}} alt="" />
+              <div className="col-md-4 gap-1 d-flex flex-column ">
+              <img className="rightTop  mt-md-0" src={`${serverURL}/uploads/${room?.images[1]}`} style={{width:"100%",height:"148px"}} alt="" />
+              <img className="rightBottom " src={`${serverURL}/uploads/${room?.images[0]}`} style={{width:"100%",height:"148px"}} alt="" />
               </div>
             </div>
   </div>
   <div className='col-md-5'>
-     <p>
+     <p style={{fontSize:"15px"}} >
        {room.description}
      </p>
      {room.amenities.map(amenity => (
-    <button className='btn btn-light me-3 px-2 py-1' key={amenity}>{amenity}</button>
+  <span style={{fontSize:"15px"}} className='fw-bold mb-2 me-3 p-1' key={amenity}> <i className='fa-solid fa-check text-success'></i> {amenity}</span>
+
     
     ))}
     <div className="d-flex justify-content-end">
     <button className='btn btn-danger' onClick={()=>handleRoomDelete(room?._id)}>Delete</button>
-    <button className='btn btn-light ms-3'>Edit</button>
+    <button className='btn btn-light ms-3'><EditRoom rId={room?._id}></EditRoom></button>
     
     </div>
   </div>
@@ -196,7 +209,7 @@ hotel.rooms.map(room=>(
 </div>
 <div className="d-flex justify-content-start">
 <button className='btn btn-danger' onClick={()=>handleDeleteProperty(hotel?._id)} >Delete Property </button>
-<button className='btn btn-light ms-3'>Edit Property</button>
+<EditHotel hId={hotel?._id}></EditHotel>
 
 </div>
 </div>

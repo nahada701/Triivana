@@ -1,5 +1,5 @@
 *{
-  color: rgb(74, 74, 74);
+
   font-family: "Poppins", serif;
   font-weight: 300;
   font-style: normal;
@@ -14,15 +14,10 @@
   min-height: 98vh;
   margin: 1vh;
   padding: 10px !important;
-  animation: backgroundSlide 20s infinite ease-in-out;
-  transition: background-image 2s ease-in-out;
+background-image: url("https://images.unsplash.com/photo-1537823286324-7d070255022e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); 
+
 }
-@keyframes backgroundSlide {
-  0%, 25% { background-image: url("https://images.unsplash.com/photo-1561501878-aabd62634533?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-  30%, 50% { background-image: url("https://images.unsplash.com/photo-1537823286324-7d070255022e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-  55%, 75% { background-image: url("https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-  80%, 100% { background-image: url("https://images.unsplash.com/photo-1545403842-6b8149e2759e?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-}
+
 .white-btn{
   border-radius: .5rem;
   border: none;
@@ -250,10 +245,49 @@ li{
 }
 .cards{
   border-radius: 10px;
-  background-color: blue;
+  background-color: #0d5ce5;
   
 }
 .cards:hover{
+  background-color: rgb(0 37 75);
   cursor: pointer;
-  background-color: #000000;
+}
+.login-with-google-btn{
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.login-with-google-btn:hover {
+  background-color: #f1f1f1;
+}
+
+.login-with-google-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.react-calendar__tile--now {
+  color: white !important; /* Ensure text is white */
+  background: #4c8dff !important; /* Change on hover */
+  border-radius: 10px; /* Optional: Make it rounded */
+  opacity: 1 !important;
+}
+
+/* Hover effect for the current date */
+.react-calendar__tile--now:hover {
+  background: #7f94cf !important; /* Change this to your preferred color */
+  color: white !important; /* Ensure text stays white */
+}
+.bg-dark-blue{
+  background-color: rgb(0 37 75) !important;
 }

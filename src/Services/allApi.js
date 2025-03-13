@@ -160,3 +160,26 @@ export const bookingHistoryApi=async(reqHeader)=>{
 export const propertyOwnerReviewsApi=async(reqHeader)=>{
     return await commenApi("GET",`${serverURL}/reviews-admin`,{},reqHeader)
 }
+export const googleAuthApi = async (reqBody) => {
+    return await commenApi("POST", `${serverURL}/google-auth`, reqBody);
+  };
+ 
+export const propertyOwnerEarningsApi = async (reqHeader) => {
+    return await commenApi("GET", `${serverURL}/earnings-admin`,"", reqHeader);
+  };
+
+  export const getHotelDetialsByIdApi = async (hotelId,reqHeader) => {
+    return await commenApi("GET", `${serverURL}/hoteldetails/${hotelId}`,"", reqHeader);
+  };
+
+  export const EditHotelApi = async (hotelId,reqBody,reqHeader) => {
+    return await commenApi("PUT", `${serverURL}/edit-property/${hotelId}`,reqBody, reqHeader);
+  };
+
+  export const getRoomByRoomId = async (roomId,reqHeader) => {
+    return await commenApi("GET", `${serverURL}/room-details/${roomId}`,"", reqHeader);
+  };
+
+  export const EditRoomApi = async (roomId,reqBody,reqHeader) => {
+    return await commenApi("PUT", `${serverURL}/edit-room/${roomId}`,reqBody, reqHeader);
+  };

@@ -5,6 +5,10 @@ export const addResponseContext=createContext()
 export const addReviewContext=createContext()
 export const updateReviewContext=createContext()
 export const deleteResponseContext=createContext()
+export const editHotelResponseContext=createContext()
+export const editRoomResponseContext=createContext()
+
+
 
 
 function ContextApi({children}) {
@@ -12,6 +16,11 @@ function ContextApi({children}) {
     const [addReview,setAddReview]=useState()
     const [updateReview,setUpdateReview]=useState()
     const [deleteResponse,setDeleteResponse]=useState()
+    const [editHotelResponse,setEditHotelResponse]=useState()
+    const [editRoomResponse,setEditRoomResponse]=useState()
+    
+
+
 
  
   return (
@@ -21,7 +30,9 @@ function ContextApi({children}) {
            <deleteResponseContext.Provider value={{deleteResponse,setDeleteResponse}}>
               <addReviewContext.Provider  value={{addReview,setAddReview}}>
                <updateReviewContext.Provider value={{updateReview,setUpdateReview}}> 
-                {children}
+               <editHotelResponseContext.Provider value={{editHotelResponse,setEditHotelResponse}}> 
+               <editRoomResponseContext.Provider value={{editRoomResponse,setEditRoomResponse}}> {children}</editRoomResponseContext.Provider>
+                </editHotelResponseContext.Provider>
                 </updateReviewContext.Provider>
                 </addReviewContext.Provider>
          

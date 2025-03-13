@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getPropertyDashboardDataApi } from '../../../Services/allApi'
-import { Spinner } from 'react-bootstrap'
+
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
+import BeatLoader from '../../Shared/BeatLoader'
 
 
 function DashboardContent() {
@@ -13,10 +14,13 @@ function DashboardContent() {
   const [lastMonthEarnings, setLastMonthEarnings] = useState()
   const [allTimeEarnings, setAllTimeEarnings] = useState()
   const [availableRooms, setAvailableRooms] = useState()
+  const [cardDataISLoading, setCardDataIsLoading] = useState(false)
+
   useEffect(() => {
     getPropertyDashboardData()
   }, [])
   const getPropertyDashboardData = async () => {
+    setCardDataIsLoading(true)
     const token = sessionStorage.getItem("adminToken")
 
     if (token) {
@@ -26,11 +30,14 @@ function DashboardContent() {
       }
       try {
         const result = await getPropertyDashboardDataApi(reqHeader)
-        setAllTimeEarnings(result.data.allTimeEarnings)
-        setLastMonthEarnings(result.data.lastMonthEarnings)
-        setLastThreeDaysReviews(result.data.lastThreeDaysReviewsCount)
-        setUpcomingBookingCount(result.data.upcomingBookingCount)
-        setAvailableRooms(result.data.availableRooms)
+        if(result.status==200){
+          setAllTimeEarnings(result.data.allTimeEarnings)
+          setLastMonthEarnings(result.data.lastMonthEarnings)
+          setLastThreeDaysReviews(result.data.lastThreeDaysReviewsCount)
+          setUpcomingBookingCount(result.data.upcomingBookingCount)
+          setAvailableRooms(result.data.availableRooms)
+          setCardDataIsLoading(false)
+        }
       }
       catch (err) {
         console.log(err);
@@ -47,34 +54,46 @@ function DashboardContent() {
   return (
     <div>
       <div className="container">
-        <div className="d-flex align-items-center gap-5 flex-wrap justify-content-center">
-          <div className="cards text-light p-3  text-center  ">
-            <h4>New Bookings</h4>
-            <h4>{upcomingBookingCount ? upcomingBookingCount : <Spinner></Spinner>}</h4>
-            <Link className='text-light ' style={{ textDecoration: "none" }} to={'/dashboard/bookings'}>See all bookings</Link>
-          </div>
-          <div className="cards text-light p-3  text-center  ">
-            <h4>New Reviews</h4>
-            <h4>{lastThreeDaysReviews ? lastThreeDaysReviews : <Spinner></Spinner>}</h4>
-            <Link className='text-light ' style={{ textDecoration: "none" }} to={'/dashboard/reviews'}>See all reviews</Link>
+      <div className="container mt-4">
+  <div className="row g-3"> {/* g-3 adds spacing between grid items */}
+    <div className="col-12 col-sm-6 col-lg-3">
+      <div className="cards text-light p-3 text-center">
+        <h4>New Bookings</h4>
+        {cardDataISLoading? <BeatLoader /> :<h4>  { upcomingBookingCount ||0}</h4>}
+        <Link className="text-light" style={{ textDecoration: "none" }} to="/dashboard/bookings">See all bookings</Link>
+      </div>
+    </div>
 
-          </div>
-          <div className="cards text-light p-3  text-center  ">
-            <h4>Total Earnings</h4>
-            <h4>{allTimeEarnings ? allTimeEarnings : <Spinner></Spinner>}</h4>
-            <Link className='text-light ' style={{ textDecoration: "none" }} to={'/dashboard/earnings'}>See details</Link>
+    <div className="col-12 col-sm-6 col-lg-3">
+      <div className="cards text-light p-3 text-center">
+        <h4>New Reviews</h4>
+        {cardDataISLoading? <BeatLoader /> :<h4>  { lastThreeDaysReviews ||0}</h4>}
+        <Link className="text-light" style={{ textDecoration: "none" }} to="/dashboard/reviews">See all reviews</Link>
+      </div>
+    </div>
 
-          </div>
-          <div className="cards text-light p-3  text-center  ">
-            <h4>Last month Earnings</h4>
-            <h4>{lastMonthEarnings ? lastMonthEarnings : <Spinner></Spinner>}</h4>
-            <Link className='text-light ' style={{ textDecoration: "none" }} to={'/dashboard/earnings'}>See details</Link>
+    <div className="col-12 col-sm-6 col-lg-3">
+      <div className="cards text-light p-3 text-center">
+        <h4>Total Earnings</h4>
+        {cardDataISLoading? <BeatLoader /> :<h4>  { allTimeEarnings ||0}</h4>}
 
-          </div>
-        </div>
+        <Link className="text-light" style={{ textDecoration: "none" }} to="/dashboard/earnings">See details</Link>
+      </div>
+    </div>
+
+    <div className="col-12 col-sm-6 col-lg-3">
+      <div className="cards text-light p-3 text-center">
+        <h4>30 day Earnings</h4>
+       {cardDataISLoading? <BeatLoader /> :<h4>  { lastMonthEarnings ||0}</h4>}
+        <Link className="text-light" style={{ textDecoration: "none" }} to="/dashboard/earnings">See details</Link>
+      </div>
+    </div>
+  </div>
+</div>
+
         <div className="row">
-          <div className="col-md-7 d-flex justify-content-end">
-            <div className="card bg-dark text-light mt-5 p-5  " style={{ width: "93%" }}>
+          <div className="col-md-7 d-flex justify-content-center">
+            <div className="card bg-dark-blue text-light mt-5 p-5  " style={{ width: "93%" }}>
               {
                 availableRooms ?
                   availableRooms.map((hotelData, index) => (
@@ -101,6 +120,11 @@ function DashboardContent() {
           </div>
           <div className="col-md-5 d-flex justify-content-center mt-5">
             <Calendar
+             tileClassName={({ date, view }) =>
+              view === 'month' && date.toDateString() === new Date().toDateString()
+                ? 'custom-today'
+                : null
+            }
             ></Calendar>
           </div>
         </div>

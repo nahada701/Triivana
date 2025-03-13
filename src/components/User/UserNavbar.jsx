@@ -9,6 +9,11 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 import { userLoginApi, userRegisterApi } from '../../Services/allApi';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import jwt_decode from "jwt-decode"; // Change jwt_decode to jwtDecode
+
+import { googleAuthApi } from '../../Services/allApi';
+
 import Dropdown from 'react-bootstrap/Dropdown';
 
 function UserNavbar() {
@@ -131,7 +136,33 @@ useEffect(() => {
     setIsLogedin(false)
   }
 
- 
+
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    try {
+      const decoded = jwt_decode(credentialResponse.credential);
+      console.log(decoded); // User info from Google
+
+      // Send to backend for JWT token creation
+      const result = await googleAuthApi({
+        name: decoded.name,
+        email: decoded.email,
+        googleId: decoded.sub,
+      });
+
+      if (result.status === 200) {
+        sessionStorage.setItem("user", JSON.stringify(result.data.user));
+        sessionStorage.setItem("userToken", result.data.token);
+        setIsLogedin(true);
+        handleClose();
+        toast.success("Logged in successfully!");
+      } else {
+        toast.error("Login failed");
+      }
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      toast.error("Something went wrong!");
+    }
+  };
   return (
     <div className="">
       <Navbar expand="lg" style={{ backgroundColor: 'transparent' }}>
@@ -226,6 +257,23 @@ useEffect(() => {
  <div className='d-flex align-items-center justify-content-center mt-4 w-100'>
   <button onClick={handlelogin}  style={{height:"50px"}} className='w-100 black-btn px-4 '>Log in</button>
   </div>}
+  <hr />
+  <div className='d-flex align-items-center justify-content-center mt-4 w-100'>
+  <GoogleOAuthProvider clientId="659194423703-qqskhlm3fgiv6m2c468fgib7ole89j0g.apps.googleusercontent.com">
+      <GoogleLogin
+        onSuccess={handleGoogleLoginSuccess}
+        onError={() => {
+          toast.error("Google Sign-In Failed");
+        }}
+        theme="outline"  // Options: "outline", "filled_black", "filled_blue"
+        size="large"          // Options: "small", "medium", "large"
+        text="continue_with"  // Options: "sign_in", "sign_up", "continue_with"
+        shape="round" 
+        
+     
+      />
+    </GoogleOAuthProvider>
+  </div>
 {
   isSignup?
   <p className='text-center pt-4'><span >Already have an account?  <a onClick={handleLoginClick} style={{cursor:"pointer"}} className=''>Log In</a></span></p>
