@@ -132,7 +132,7 @@ function Home() {
 
         <div className="search-area">
           <div className="my-1 row m-0 d-flex align-items-end justify-content-between">
-            <div className="col-md-4">
+            <div className="col-md-4 mb-2">
               <h6>Location</h6>
               <div className="d-flex justify-content-between">
                 <span className="px-2 border d-flex align-items-center  bg-light" style={{ height: "40px" }}>
@@ -220,7 +220,7 @@ function Home() {
                 </select>
               </div>
             </div> */}
-            <div className="col-md-8 ">
+            <div className="col-md-8 mb-2">
             <div className="d-flex align-items-center text-dark flex-wrap gap-2">
               <h6 className="ms-2 mb-0 ">Filter: </h6>
               <button
@@ -293,11 +293,11 @@ function Home() {
     </div>
      :
       <div>
-        <div className="text-dark p-4 destination">
+        {/* <div className="text-dark p-4 destination">
           <h2>Discover Your destination</h2>
           <p>Explore our range of property types for every traveler's preference</p>
   
-          {/* property type cards */}
+        
   
           <div className="row mt-4">
             <div className="col-lg-3 col-sm-6">
@@ -351,7 +351,7 @@ function Home() {
           </div>
   
         </div>
-        
+         */}
   
         <div className="text-dark p-4 destination">
           <h2>Top trending hotel In India</h2>

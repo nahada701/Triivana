@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { propertyOwnerReviewsApi } from '../../../Services/allApi'
+import Spinner from '../../Shared/BeatLoader'
 
 function Reviews() {
 
   const [allReview,setAllReviews]=useState( { })
-
+  const [isloading,setIsLoading]=useState(false)
 useEffect(() => {
      getReviews()
     }, [])
@@ -16,10 +17,11 @@ const getReviews=async()=>{
                 "Content-Type": "application/json"
               }
               try{
-
+                setIsLoading(true)
                 const result=await propertyOwnerReviewsApi(reqHeader) 
                 console.log(result);
                 if(result.status==200){
+                  setIsLoading(false)
                   setAllReviews(result.data)
                 }                
               }
@@ -38,6 +40,8 @@ const getReviews=async()=>{
         <h3 className='py-3 '>Reviews & Ratings</h3>
 
        {
+        isloading?<Spinner></Spinner>
+        :
         allReview?.length>0?
         allReview?.map(hotel=>(
 
@@ -73,7 +77,8 @@ const getReviews=async()=>{
         </div>
         ))
         :
-        <h3>No Reviews For Your Properties yet</h3>
+        <p className='text-center fs-2 my-5 py-5'>No bookings yet</p>
+       
      }
 
 

@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import AddHotel from '../AddHotel'
 import { deleteProperyApi, deleteRoomApi, getAdminHotelsDetailsApi } from '../../../Services/allApi'
 import serverURL from '../../../Services/ServerURL'
-import { addResponseContext, deleteResponseContext, editHotelResponseContext, editRoomResponseContext } from '../../../context/ContextApi'
+import { addResponseContext, addRoomResponseContext, deleteResponseContext, editHotelResponseContext, editRoomResponseContext } from '../../../context/ContextApi'
 import { toast } from 'react-toastify'
 import EditHotel from '../EditHotel'
 import EditRoom from '../EditRoom'
+import Spinner from '../../Shared/Spinner'
+import AddNewRoom from '../AddNewRoom'
 
 function ManageListings() {
 
@@ -13,18 +15,20 @@ function ManageListings() {
   const{deleteResponse,setDeleteResponse}=useContext(deleteResponseContext)
   const { editHotelResponse,setEditHotelResponse } = useContext(editHotelResponseContext)
   const {editRoomResponse,setEditRoomResponse}=useContext(editRoomResponseContext)
+  const{addRoomResponse,setaddRoomResponse}=useContext(addRoomResponseContext)
   
   const [hotelsWithRoomData,setHotelsWithRoomsData]=useState([])
-console.log(hotelsWithRoomData);
+   console.log(hotelsWithRoomData);
 
+const[isLoading,setIsloading]=useState(false)
 
 useEffect(() => {
  getHotelsAllData()
-}, [addResponse,deleteResponse,editHotelResponse,editRoomResponse])
+}, [addResponse,deleteResponse,editHotelResponse,editRoomResponse,addRoomResponse])
 
 const getHotelsAllData=async()=>{
 
-  
+  setIsloading(true)
   const token=sessionStorage.getItem("adminToken")
   
   if(token){
@@ -37,9 +41,13 @@ const getHotelsAllData=async()=>{
         const result=await getAdminHotelsDetailsApi(reqHeader)
 
         if(result.status==200){
+          setIsloading(false)
+
           setHotelsWithRoomsData(result.data)
         }
         else if (result.status==404){
+          setIsloading(false)
+
           console.log(result.response.data);
           
         }
@@ -127,8 +135,10 @@ const handleEditProperty=async(id)=>{
 
            {/* hotels list here     */}
 
-           <h4 className='mt-5  '>Your listed properties ({hotelsWithRoomData.length})</h4>
-     { hotelsWithRoomData?.length>0? 
+           <h5 className='mt-5 mb-4  '>Your listed properties ({hotelsWithRoomData.length})</h5>
+     { 
+     isLoading?<Spinner></Spinner>:
+     hotelsWithRoomData?.length>0? 
      hotelsWithRoomData.map(hotel=>(
       <div className='shadow  mb-4 bg-light pb-3 p-5'>
         <div className='d-flex justify-content-between'>
@@ -207,9 +217,12 @@ hotel.rooms.map(room=>(
 }
 
 </div>
-<div className="d-flex justify-content-start">
-<button className='btn btn-danger' onClick={()=>handleDeleteProperty(hotel?._id)} >Delete Property </button>
-<EditHotel hId={hotel?._id}></EditHotel>
+<div className='d-flex justify-content-between'>
+  <div className="d-flex justify-content-start">
+  <button className='btn btn-danger' onClick={()=>handleDeleteProperty(hotel?._id)} >Delete Property </button>
+  <EditHotel hId={hotel?._id}></EditHotel>
+  </div>
+  <AddNewRoom hId={hotel?._id}></AddNewRoom>
 
 </div>
 </div>

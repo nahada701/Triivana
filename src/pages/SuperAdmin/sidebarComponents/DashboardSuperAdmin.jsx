@@ -81,7 +81,7 @@ function DashboardSuperAdmin() {
         datasets: [{
 
             data: numOfPropertyType,
-            backgroundColor: ["#0a64f5", "#7ba7ed", "navy", "black","#7f75eb"]
+            backgroundColor: ["#0a64f5", "#7ba7ed", "navy", "black","#0e0752","blue"]
 
         }]
     }

@@ -52,13 +52,15 @@ function Bookings() {
 
 
   const [guestName,setGuestName]=useState("")
+  const [isLoading,setIsLoading]=useState(false)
+
 
   useEffect(() => {
     getupcomingBookings()
   }, [])
   const getupcomingBookings = async () => {
     const token = sessionStorage.getItem("adminToken")
-
+    setIsLoading(true)
     if (token) {
       const reqHeader = {
         "Authorization": `Bearer ${token}`,
@@ -67,8 +69,11 @@ function Bookings() {
       try {
         const result = await getupcomingBookingsApi(reqHeader)
         console.log(result);
-        setBookings(result.data)
-        setFilteredBookings(result.data)
+        if(result.status==200){
+          setIsLoading(false)
+          setBookings(result.data)
+          setFilteredBookings(result.data)
+        }
 
       } catch (err) {
         console.log(err);
@@ -203,7 +208,8 @@ const handleMarkAsPaid=async()=>{
         <input type="text" className='form-control w-50 '    value={guestName} placeholder='Search Guest Name' onChange={(e)=>handleSearch(e)} />
         <button className='black-btn'><Link className='text-light text-decoration-none' to={'/dashboard/bookings/history'}>View booking history</Link></button>
       </div>
-      {bookings?.length > 0 ?
+    { isLoading?<Spinner></Spinner>: 
+    bookings?.length > 0 ?
         <table className="table">
           <thead>
             <tr>
@@ -253,7 +259,7 @@ const handleMarkAsPaid=async()=>{
           </tbody>
         </table>
         :
-        <Spinner></Spinner>
+        <p className='text-center fs-2 my-5 py-5'>No bookings yet</p>
       }
       <Modal   show={show} onHide={handleClose}   backdrop="static"
         keyboard={false}>

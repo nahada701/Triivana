@@ -11,6 +11,9 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
     const [allReviews, setAllReviews] = useState()
     const [pendingReviews, setPendingReviews] = useState()
     const [approvedReviews, setApprovedReviews] = useState()
+    const [updating, setUpdating] = useState(false)
+
+
 
 
     useEffect(() => {
@@ -42,16 +45,20 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
 
     const handleUpdateReview=async(id,status)=>{
         const token = sessionStorage.getItem("superAdminToken")
+
         const reqHeader = {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
-
         }
         if(token){
             try {
+                setUpdating(true)
                 const result =await updateReviewApi({id,status},reqHeader)
+                
                 console.log(result);
+                if(result.status==200)
                 setUpdateReview(result.data)
+            
                 
             } catch (error) {
                 console.log(error);
@@ -59,6 +66,8 @@ const{updateReview,setUpdateReview}=useContext(updateReviewContext)
             }
         }
        
+
+        
 
     }
     return (

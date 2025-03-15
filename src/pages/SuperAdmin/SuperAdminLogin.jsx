@@ -40,7 +40,7 @@ const handleSuperAdminLogin=async()=>{
   return (
     <div>
         <div className="d-flex flex-column m-auto w-50  align-items-center justify-content-center" style={{minHeight:"80vh"}}>
-      <h2>Admin Login Triivana</h2>
+      <h2>Superadmin Login Triivana</h2>
       <FloatingLabel
         controlId="floatingInput"
         label="Email address"

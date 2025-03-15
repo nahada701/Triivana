@@ -3,8 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { changeAdminPasswordApi } from "../../../Services/allApi";
 function Settings() {
-  const [profile, setProfile] = useState({ name: "", email: "", phone: "" });
+  const [profile, setProfile] = useState({ email: "", oldPassword: "", newPassword: "" });
 
   const [show, setShow] = useState(false);
 
@@ -16,6 +17,34 @@ function Settings() {
     sessionStorage.removeItem("admin");
     navigate("/"); 
   }
+
+  const handlePasswordChange=async()=>{
+    const token = sessionStorage.getItem("adminToken")
+  if(profile.email&& profile.newPassword&& profile.oldPassword){
+      if (token) {
+        const reqHeader = {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+        const reqBody=profile
+        try {
+          
+          const result=await changeAdminPasswordApi(reqBody,reqHeader)
+          console.log(result);
+          if(result.status==200){
+            toast.success("Password has been chnaged")
+          }
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+    }
+    else{
+   alert.warning("plaese fill all details")
+    }
+  }
   return (
    
     <div className="container  my-4">
@@ -26,15 +55,6 @@ function Settings() {
         <div className="card  w-75 p-4">
           <h3>Profile Update</h3>
           <div className="mb-3">
-            <label className="form-label">Name</label>
-            <input
-              type="text"
-              value={profile.name}
-              onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-              className="form-control"
-            />
-          </div>
-          <div className="mb-3">
             <label className="form-label">Email</label>
             <input
               type="email"
@@ -44,15 +64,24 @@ function Settings() {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Phone</label>
+            <label className="form-label">Old Password</label>
             <input
-              type="tel"
-              value={profile.phone}
-              onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+              type="password"
+              value={profile.oldPassword}
+              onChange={(e) => setProfile({ ...profile, oldPassword: e.target.value })}
               className="form-control"
             />
           </div>
-          <button className=" btn border-2 border-dark border">Save Changes</button>
+          <div className="mb-3">
+            <label className="form-label">New Password</label>
+            <input
+              type="password"
+              value={profile.newPassword}
+              onChange={(e) => setProfile({ ...profile, newPassword: e.target.value })}
+              className="form-control"
+            />
+          </div>
+          <button className=" btn border-2 border-dark border" onClick={handlePasswordChange}>Save Changes</button>
         </div>
      </div>
   

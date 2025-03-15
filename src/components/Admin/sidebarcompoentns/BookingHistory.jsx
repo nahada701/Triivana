@@ -75,8 +75,14 @@ function BookingHistory() {
                         <td>{booking?.checkOutDate.split("T")[0]}</td>
                         <td>{booking?.phone}</td>
                         <td className={`${booking?.status=="confirmed"?"text-success":"text-danger"} fw-bold`} >{booking?.status=="confirmed"?"CheckedOut":"Cancelled"}</td>
-                        <td className={` fw-bold ${booking?.paymentMade>=booking?.totalprice?"text-success":"text-danger"}`}>{booking?.paymentMade==booking?.totalprice?"Paid":booking?.paymentMade-booking?.totalprice}</td>
-    
+                        <td className={`fw-bold ${booking?.paymentMade === 0 ? "text-danger" : booking?.paymentMade >= booking?.totalprice ? "text-success" : "text-warning"}`}>
+  {booking?.paymentMade === 0 
+    ? "NA" 
+    : booking?.paymentMade >= booking?.totalprice 
+      ? "Paid" 
+      : `Pending: ₹${booking?.totalprice - booking?.paymentMade}`}
+</td>
+
     
                     </tr> 
                )) }   

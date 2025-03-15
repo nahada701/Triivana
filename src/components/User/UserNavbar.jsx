@@ -8,13 +8,14 @@ import Modal from 'react-bootstrap/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
-import { userLoginApi, userRegisterApi } from '../../Services/allApi';
+import { sendOTPApi, userLoginApi, userRegisterApi } from '../../Services/allApi';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import jwt_decode from "jwt-decode"; // Change jwt_decode to jwtDecode
 
 import { googleAuthApi } from '../../Services/allApi';
 
 import Dropdown from 'react-bootstrap/Dropdown';
+import Spinner from '../Shared/BeatLoader';
 
 function UserNavbar() {
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
@@ -28,6 +29,8 @@ const [username,setUsername]=useState("")
   const [isLogedin,setIsLogedin]=useState(false)
 
   const[isAdminLogedin,setIsAdminLogedin]=useState()
+
+  const[otp,setotp]=useState()
   
   
 useEffect(() => {
@@ -38,7 +41,7 @@ setIsLogedin(true)
 
 
 }
-}, [])
+}, [isLogedin])
 
 useEffect(() => {
   if(sessionStorage.getItem("adminToken")){
@@ -57,9 +60,14 @@ useEffect(() => {
   const handleClose = () => {
     setUserDetails({name:"",email:"",password:"",confirmPassword:""})
     setShow(false)
+    setIsLoginLoading(false)
+    setIsSignupLoading(false)
+
   };
   const handleShow = () => setShow(true);
 
+  const[isSignupLoading,setIsSignupLoading]=useState(false)
+  const[isLoginLoading,setIsLoginLoading]=useState(false)
 
   const [isSignup,setIsSignup]=useState(false)
 
@@ -70,15 +78,35 @@ useEffect(() => {
     setIsSignup(false)
 
   }
+  const [sendOTPClicked,setSendOTPClicked]=useState(false)
 
+  const handleOtpGeneration=async()=>{
+    const{name,email,password,confirmPassword}=userDetails
+    if(name&&email&&password&&confirmPassword){
+    setSendOTPClicked(true)
+      // generate otp
+      try{
+       const result=await sendOTPApi({email})
+       console.log(result);
+       
+      }catch(err){
+        console.log(err);
+        
+      }
+    }
+    else{
+      toast.warning("please enter all fields")
+    }
+  }
   const handleregister=async()=>{
     const{name,email,password,confirmPassword}=userDetails
-
-    if(name&&email&&password&&confirmPassword){
+    if(name&&email&&password&&confirmPassword&&otp){
       if(confirmPassword==password){
-        const reqBody={name,email,password}
+        setIsSignupLoading(true)
+        const reqBody={name,email,password,otp}
         try{
           const result=await userRegisterApi(reqBody)
+          setIsSignupLoading(false)
           if(result.status==200){
             toast.success("user registerd successfully")
             setIsSignup(false)
@@ -104,29 +132,40 @@ useEffect(() => {
 
   const handlelogin=async()=>{
   const{email,password}=  userDetails
+  setIsLoginLoading(true)
   if(email&&password){
     try{
       const reqBody={email,password}
       const result=await userLoginApi(reqBody)
-
+    
       if(result.status==200){
+
         sessionStorage.setItem("user",JSON.stringify(result.data.user))
         sessionStorage.setItem("userToken",result.data.token)
         setIsLogedin(true)
         handleClose()
+        toast.success("Welcome")
+        setIsLoginLoading(false)
+
+      }else if(result.status==404){
+        toast.error("Invalid credentials")
+        setIsLoginLoading(false)
 
       }
-      else if(result.status==404){
-        toast(result.response.data)
-      }
+   
     }
     catch(err){
-      console.log(err);
+      if(err.response){
+        setIsLoginLoading(false)
+  
+        
+      }
       
     }
   }
   else{
     toast.warning('please enter all fields')
+    setIsLoginLoading(false)
   }
 
   }
@@ -155,7 +194,7 @@ useEffect(() => {
         setIsLogedin(true);
         handleClose();
         toast.success("Logged in successfully!");
-      } else {
+      } else{
         toast.error("Login failed");
       }
     } catch (error) {
@@ -246,17 +285,29 @@ useEffect(() => {
       </FloatingLabel>
       {isSignup && 
       
-        <FloatingLabel controlId="floatingPassword2" label="Password">
+        <FloatingLabel controlId="floatingPassword2" label="Confirm Password">
           <Form.Control value={userDetails.confirmPassword} onChange={(e)=>setUserDetails({...userDetails,confirmPassword:e.target.value})} type="password" placeholder="Confirm Password" />
         </FloatingLabel>}
-
+        {sendOTPClicked&&isSignup&&
+ <>
+    <FloatingLabel className='my-3' controlId="floatingPassword2" label="Type OTP">
+    <Form.Control value={otp} onChange={(e)=>setotp(e.target.value)}  type="text" placeholder="Type OTP" />
+  </FloatingLabel>
+   
+ </>
+  }
  {isSignup? 
  <div className='d-flex align-items-center justify-content-center mt-4 w-100'>
-  <button onClick={handleregister} style={{height:"50px"}} className='w-100 black-btn px-4 '>Sign up</button>
+  { sendOTPClicked?<button onClick={handleregister} style={{height:"50px"}} className='w-100 black-btn px-4 '>{isSignupLoading?<Spinner></Spinner>:"Signup"}</button> :
+   <button onClick={handleOtpGeneration} style={{height:"50px"}} className='w-100 black-btn px-4 '>{"Send OTP"}</button>}
+  
+
+ 
   </div>:
  <div className='d-flex align-items-center justify-content-center mt-4 w-100'>
-  <button onClick={handlelogin}  style={{height:"50px"}} className='w-100 black-btn px-4 '>Log in</button>
+  <button onClick={handlelogin}  style={{height:"50px"}} className='w-100 black-btn px-4 '>{isLoginLoading?<Spinner></Spinner>:"Login"}</button>
   </div>}
+
   <hr />
   <div className='d-flex align-items-center justify-content-center mt-4 w-100'>
   <GoogleOAuthProvider clientId="659194423703-qqskhlm3fgiv6m2c468fgib7ole89j0g.apps.googleusercontent.com">

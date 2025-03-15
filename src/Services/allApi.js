@@ -183,3 +183,15 @@ export const propertyOwnerEarningsApi = async (reqHeader) => {
   export const EditRoomApi = async (roomId,reqBody,reqHeader) => {
     return await commenApi("PUT", `${serverURL}/edit-room/${roomId}`,reqBody, reqHeader);
   };
+
+  export const changeSuperAdminPasswordApi = async (reqBody,reqHeader) => {
+    return await commenApi("PUT", `${serverURL}/change-password-superAdmin`,reqBody, reqHeader);
+  };
+
+  export const sendOTPApi = async (reqBody) => {
+    return await commenApi("POST", `${serverURL}/send-otp`,reqBody);
+  };
+  export const changeAdminPasswordApi = async (reqBody,reqHeader) => {
+    return await commenApi("PUT", `${serverURL}/change-admin-password`,reqBody, reqHeader);
+  };
+

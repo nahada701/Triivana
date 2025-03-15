@@ -129,7 +129,8 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
         return;
       }
       setIsLoading(true)
-      const reqBody = { roomId: room?._id, checkInDate, checkOutDate, numberOfRooms: numOfRoom }
+      const reqBody = { roomId: room?._id, propertyname:hotel?.propertyname, checkInDate, checkOutDate, numberOfRooms: numOfRoom }
+      
       const reqHeader = {
         " Content-Type": "application/json",
         "Authorization": `Bearer ${userToken}`
@@ -143,6 +144,9 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
           if (result.data >= numOfRoom) {
             setIsRoomsAvailable(true)
           }
+        }
+        else if(result.status==500){
+          toast("Please Try again")
         }
 
 
@@ -231,7 +235,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
     <div>
       <div className="container my-2">
         <div className="d-flex">
-          <img style={{ height: "150px", width: "150px" }} src={`${serverURL}/uploads/${room.images[0]}`} alt="" />
+          <img style={{ height: "150px", width: "150px" }} src={`${serverURL}/uploads/${room.images[3]}`} alt="" />
           <div className="ms-3">
             <h5 className="text-light-dark">{hotel?.propertyname}</h5>
             <h6><span className="text-primary fs-4 fw-bold">₹{(room?.pricePerNight * numOfRoom * numOfDays)}</span></h6>

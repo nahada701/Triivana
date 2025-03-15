@@ -104,23 +104,29 @@ const getHotelDetilas=async()=>{
    "Content-Type":"application/json",
    "Authorization":`Bearer ${userToken}`
    }
-   try {
+   if( value ){
 
-    const result=await addReviewApi(reqBody,reqHeader)
-    console.log(result);
-    
-    if(result.status==200){
-      setAddingReview(false)
-      toast.success("Thanks for the honest review")
-      setReview("")
-      setValue(5)
-      setUpdateReview(result.data)
-     
-    }
-    
-   } catch (error) {
-    console.log(error);
-    
+     try {
+  
+   
+      const result=await addReviewApi(reqBody,reqHeader)
+      console.log(result);
+      
+      if(result.status==200){
+        setAddingReview(false)
+        toast.success("Thanks for the honest review")
+        setReview("")
+        setValue(5)
+        setUpdateReview(result.data)
+       
+      }
+      
+     } catch (error) {
+      console.log(error);
+      
+     }
+   }else{
+    toast.warning("Please selcect rating")
    }
       
     }
@@ -189,6 +195,8 @@ const handleSaveProperty=async()=>{
     toast.warning("Please login")
   }
 }
+
+const stars=Math.floor(hotel?.reviews.reduce((acc,rev)=>acc+rev.rating,0)/hotel?.reviews.length)||0
   return (
 
   <div className=''>
@@ -198,17 +206,10 @@ const handleSaveProperty=async()=>{
       <div className='mt-3 mb-5 container '>
       
      <div className=''> 
+    {Array.from({length:stars}).map((_,i)=>(
       <i className='fa-solid fa-star text-warning '></i>
-      <i className='fa-solid fa-star text-warning '></i>
-      <i className='fa-solid fa-star text-warning '></i>
-      <i className='fa-solid fa-star text-warning '></i>
-  
-  
-  
-  
-  
-    
-      <div className='d-flex '>
+    ) ) }
+   <div className='d-flex '>
        <div>
           <h3>{hotel?.propertyname}</h3>
           <h6>  {hotel?.propertytype}</h6>

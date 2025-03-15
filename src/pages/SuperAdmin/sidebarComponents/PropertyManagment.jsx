@@ -83,7 +83,7 @@ function PropertyManagment() {
                   <tr>
                     <th>No</th>
                     <th>Name</th>
-                    <th>Address</th>
+                    <th>Place</th>
                     <th>Owner</th>
                     <th>email</th>
                     <th>phone</th>
@@ -98,7 +98,7 @@ function PropertyManagment() {
                       <tr>
                         <td>{index + 1}</td>
                         <td>{hotel?.propertyname}</td>
-                        <td>{hotel?.address}</td>
+                        <td>{hotel?.place}</td>
                         <td>{hotel?.adminId?.firstname} {hotel?.adminId?.lastname}</td>
                         <td>{hotel?.email}</td>
                         <td>{hotel?.phone}</td>
