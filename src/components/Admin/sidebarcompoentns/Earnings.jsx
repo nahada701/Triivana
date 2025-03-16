@@ -44,7 +44,7 @@ function Earnings() {
   const [lastYearHotelGraphData,setLastYearHotelGraphData]=useState()
   const [paymentModeData,setPaymentModeData]=useState()
   const [totalEarnings,setTotalEarnings]=useState()
-
+  
   
   const[isDataLoading,setIsDataLoading]=useState(false)
 

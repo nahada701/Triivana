@@ -18,7 +18,7 @@ import SavedProperties from './pages/User/SavedProperties';
 function App() {
   return (
     <>
-      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
+      <ToastContainer position="top-right" autoClose={1000} theme="colored" />
         <ScrollToTop/>
       <Routes>
         <Route path="/" element={<Home />} />

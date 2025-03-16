@@ -225,21 +225,21 @@ function UserManagement() {
     </div>   
      <Modal size='lg' show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>User details</Modal.Title>
+          <Modal.Title>Booking details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <span className='fs-3 text-primary' style={{borderBottom:" 1px solid " }}>Booking Summary</span>
-           <br />
-          <div className='d-flex gap-3'>
-               <div>
-                   <h5 className='mt-2 d-flex gap-1'>  Total Bookings: {canceledBookings+confirmedBookings}</h5>
-               <    h5 className='mt-2 d-flex gap-1'>  Canceled: {canceledBookings}</h5>
-               </div>
-               <div>
-                   <h5 className='mt-2 d-flex gap-1'>  Completed: {confirmedBookings}</h5>
-                   <h5 className='mt-2 d-flex gap-1'>  Total spend: ₹ {totalSpend}</h5>
-               </div>
+            
+        
+          <div className='d-flex gap-3 text-success justify-content-between'>
+             
+                   <p className='mt-2 fw-bold d-flex gap-1'>  Total Bookings: {canceledBookings+confirmedBookings}</p>
+               <p    p className='mt-2 fw-bold d-flex gap-1 text-danger'>  Canceled: {canceledBookings}</p>
+              
+                   <p className='mt-2 fw-bold d-flex gap-1'>  Completed: {confirmedBookings}</p>
+                   <p className='mt-2 fw-bold d-flex gap-1'>  Total spend: ₹ {totalSpend}</p>
+              
           </div>
+          
          {
             bookings?.length>0&&
             <div className='table-responsive'>
@@ -258,11 +258,11 @@ function UserManagement() {
                         bookings?.length>0&&
                         bookings.map((booking)=>(
                             <tr>
-                            <td>{booking.hotel.propertyname}</td>
-                            <td>{booking.checkInDate.split("T")[0]}</td>
-                            <td>{booking.checkOutDate.split("T")[0]}</td>
-                            <td className={`${booking.status=="confirmed"?"text-success":"text-danger"}`}>{booking.status}</td>
-                            <td>{booking.totalprice}</td>
+                            <td>{booking?.hotel?.propertyname}</td>
+                            <td>{booking?.checkInDate.split("T")[0]}</td>
+                            <td>{booking?.checkOutDate.split("T")[0]}</td>
+                            <td className={`${booking?.status=="confirmed"?"text-success":"text-danger"}`}>{booking?.status}</td>
+                            <td>{booking?.totalprice}</td>
     
                         </tr>
                         ))
@@ -275,9 +275,7 @@ function UserManagement() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
+       
         </Modal.Footer>
       </Modal>
 

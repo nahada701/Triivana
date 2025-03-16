@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { propertyOwnerReviewsApi } from '../../../Services/allApi'
-import Spinner from '../../Shared/BeatLoader'
+import Spinner from '../../Shared/Spinner'
 
 function Reviews() {
 
@@ -77,7 +77,7 @@ const getReviews=async()=>{
         </div>
         ))
         :
-        <p className='text-center fs-2 my-5 py-5'>No bookings yet</p>
+        <p className='text-center fs-2 my-5 py-5'>No Reviews Found</p>
        
      }
 

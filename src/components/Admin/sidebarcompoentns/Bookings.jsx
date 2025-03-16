@@ -259,7 +259,7 @@ const handleMarkAsPaid=async()=>{
           </tbody>
         </table>
         :
-        <p className='text-center fs-2 my-5 py-5'>No bookings yet</p>
+        <p className='text-center fs-2 my-5 py-5'>No Bookings Found</p>
       }
       <Modal   show={show} onHide={handleClose}   backdrop="static"
         keyboard={false}>

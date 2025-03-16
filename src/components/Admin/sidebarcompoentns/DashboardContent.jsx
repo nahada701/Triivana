@@ -93,30 +93,27 @@ function DashboardContent() {
 
         <div className="row">
           <div className="col-md-7 d-flex justify-content-center">
-            <div className="card bg-dark-blue text-light mt-5 p-5  " style={{ width: "93%" }}>
-              {
-                availableRooms ?
-                  availableRooms.map((hotelData, index) => (
+          <div className="card bg-dark-blue text-light mt-5 p-5" style={{ width: "93%" }}>
+  {availableRooms && availableRooms.length > 0 ? (
+    availableRooms.map((hotelData, index) => (
+      <div key={index} className="text-light">
+        <h4 className="my-1 text-light">{hotelData?.hotel}</h4>
+        <hr />
+        {Object.entries(hotelData.rooms).map(([roomType, count]) => (
+          <div key={roomType} className="d-flex text-light justify-content-between">
+            <h6>{roomType}</h6>
+            <h6>{count} rooms left</h6>
+          </div>
+        ))}
+      </div>
+    ))
+  ) : (
+   <div className='d-flex w-100 justify-content-center h-100 align-items-center'>
+     <h4 className="text-center text-light">No hotels added yet</h4>
+   </div>
+  )}
+</div>
 
-                    <div key={index} className='text-light'>
-                      <h4 className='my-1 text-light'>{hotelData?.hotel}</h4>
-                      <hr />
-                      {Object.entries(hotelData.rooms).map(([roomType, count]) => (
-                        <div key={roomType} className="d-flex text-light justify-content-between">
-                          <h6> {roomType}</h6>
-                          <h6>{count} rooms left</h6>
-                        </div>
-                      ))}
-
-                    </div>
-                  ))
-                  :
-                  <div className='d-flex w-100 h-100 justify-content-center align-items-center'>
-
-                    <h4 className='text-center text-light'>No available rooms</h4>
-                  </div>
-              }
-            </div>
           </div>
           <div className="col-md-5 d-flex justify-content-center mt-5">
             <Calendar

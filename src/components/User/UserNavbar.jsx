@@ -23,7 +23,6 @@ function UserNavbar() {
   const [userDetails,setUserDetails]=useState({name:"",email:"",password:"",confirmPassword:""})
 
 const [username,setUsername]=useState("")
-  console.log(userDetails);
   
 
   const [isLogedin,setIsLogedin]=useState(false)
@@ -62,6 +61,7 @@ useEffect(() => {
     setShow(false)
     setIsLoginLoading(false)
     setIsSignupLoading(false)
+    setSendOTPClicked(false)
 
   };
   const handleShow = () => setShow(true);
@@ -82,6 +82,7 @@ useEffect(() => {
 
   const handleOtpGeneration=async()=>{
     const{name,email,password,confirmPassword}=userDetails
+    
     if(name&&email&&password&&confirmPassword){
     setSendOTPClicked(true)
       // generate otp
@@ -111,6 +112,7 @@ useEffect(() => {
             toast.success("user registerd successfully")
             setIsSignup(false)
             setUserDetails({name:"",email:"",password:"",confirmPassword:""})
+            setotp("")
           }
           else if(result.status==406){
             toast.error("user already exists")

@@ -235,7 +235,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
     <div>
       <div className="container my-2">
         <div className="d-flex">
-          <img style={{ height: "150px", width: "150px" }} src={`${serverURL}/uploads/${room.images[3]}`} alt="" />
+          <img style={{ height: "150px", width: "150px" }} src={`${serverURL}/uploads/${room.images[2]}`} alt="" />
           <div className="ms-3">
             <h5 className="text-light-dark">{hotel?.propertyname}</h5>
             <h6><span className="text-primary fs-4 fw-bold">₹{(room?.pricePerNight * numOfRoom * numOfDays)}</span></h6>

@@ -172,13 +172,13 @@ const handleEditProperty=async(id)=>{
 <div className="p-1 ">
 <h4>Rooms</h4>
 
-{hotel.rooms.length>0?
-hotel.rooms.map(room=>(
+{hotel?.rooms.length>0?
+hotel?.rooms?.map(room=>(
 <div className='border rounded mb-3  p-3'>
-  <h4>{room.roomType} Room</h4>
+  <h4>{room?.roomType} Room</h4>
  <h6> ({room.numberOfRooms} Rooms)</h6>
 
- <h6 className='text-danger'> ₹ {room.pricePerNight} Per Night</h6>
+ <h6 className='text-danger'> ₹ {room?.pricePerNight} Per Night</h6>
 <div className='row'>
   <div className='col-md-7'>
      <div className="row g-1 mb-3">
@@ -229,8 +229,7 @@ hotel.rooms.map(room=>(
      ))
     :
        <div className='text-center'>
-        <img className='img-fluid w-25' src="https://img.freepik.com/free-vector/flat-hotel-review-background_23-2148156492.jpg?t=st=1740416524~exp=1740420124~hmac=c66189622e805bac62d6d04a6b9e6622dd1094ef5c80a1269d2f493d5dd64b51&w=740" alt="" />
-        <h3 className='text-center'><i className='fa-solid fa-x text-danger'></i> No property added yet ! </h3>
+        <p className='text-center  fs-2  my-5 py-5'><i className='fa-solid fa-x text-danger'></i> No property added yet ! </p>
        </div>
        }
    

@@ -7,6 +7,7 @@ import { addHotelApi, addRoomsApi } from '../../Services/allApi';
 import { toast } from 'react-toastify';
 import { addResponseContext } from '../../context/ContextApi';
 import axios from 'axios';
+import Spinner from '../Shared/BeatLoader';
 
 function AddHotel() {
 
@@ -83,6 +84,8 @@ function AddHotel() {
   console.log("hotel", hotelData);
 
   const [hotelId, setHotelId] = useState("")
+  const [submitingForm, setSubmitingForm] = useState(false)
+
 
   console.log(hotelId);
 
@@ -231,6 +234,7 @@ function AddHotel() {
 
   const handleSubmitForm = async () => {
     // Check for missing room data
+    setSubmitingForm(true)
     for (const room of roomData) {
       if (!room.roomType || !room.numberOfRooms || !room.occupancy || !room.pricePerNight) {
         toast.warning("Please fill all the room details before submitting.");
@@ -273,6 +277,7 @@ function AddHotel() {
         handleClose()
         setStep(1)
         setAddResponse(results)
+        setSubmitingForm(false)
 
       }
 
@@ -616,7 +621,7 @@ function AddHotel() {
           {step == 1 ? <Button variant="primary" onClick={handleNextClick}>
             Next</Button> :
             <Button variant="primary" onClick={handleSubmitForm}>
-              Submit</Button>
+              {submitingForm?<Spinner></Spinner>:"Submit"}</Button>
           }
         </Modal.Footer>
       </Modal>
