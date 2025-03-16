@@ -5,7 +5,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { addHotelApi, addRoomsApi, EditHotelApi, getHotelDetialsByIdApi } from '../../Services/allApi';
 import { toast } from 'react-toastify';
-import serverURL from '../../Services/ServerURL';
+import serverURL from '../../Services/serverURL';
 import { editHotelResponseContext } from '../../context/ContextApi';
 
 function EditHotel({hId}) {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import hotelimg from '../../assets/r3.jpg'
-import serverURL from '../../Services/ServerURL';
+import serverURL from '../../Services/serverURL'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Rating from '@mui/material/Rating';

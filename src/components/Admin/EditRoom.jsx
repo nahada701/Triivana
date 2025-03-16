@@ -5,7 +5,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import {  EditRoomApi, getRoomByRoomId } from '../../Services/allApi';
 import { toast } from 'react-toastify';
-import serverURL from '../../Services/ServerURL';
+import serverURL from '../../Services/serverURL';
 import { editRoomResponseContext} from '../../context/ContextApi';
 function EditRoom({rId}) {
     const {editRoomResponse,setEditRoomResponse}=useContext(editRoomResponseContext)

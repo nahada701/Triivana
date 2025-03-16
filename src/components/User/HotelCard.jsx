@@ -1,6 +1,6 @@
 import { accordionActionsClasses, colors } from '@mui/material'
 import React from 'react'
-import serverURL from '../../Services/ServerURL'
+import serverURL from '../../Services/serverURL'
 import { useNavigate } from 'react-router-dom'
 
 function HotelCard({hotel}) {

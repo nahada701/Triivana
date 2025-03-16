@@ -1,5 +1,5 @@
 import commenApi from "./commenApi";
-import serverURL from "./ServerURL";
+import serverURL from "./serverURL";
 
 export const userRegisterApi=async(reqBody)=>{
     return await commenApi("POST",`${serverURL}/register-user`,reqBody)

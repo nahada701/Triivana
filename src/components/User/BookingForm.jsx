@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import serverURL from "../../Services/ServerURL";
+import serverURL from "../../Services/serverURL";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { bookingConfirmationEmailApi, BookRoomApi, checkRoomAvailabilityApi } from "../../Services/allApi";

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { getAllHotelsApi, updateHotelStatusApi } from '../../../Services/allApi'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import serverURL from '../../../Services/ServerURL';
+import serverURL from '../../../Services/serverURL';
 import Spinner from '../../../components/Shared/Spinner';
 function PropertyManagment() {
 

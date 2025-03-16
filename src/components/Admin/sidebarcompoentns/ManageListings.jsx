@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddHotel from '../AddHotel'
 import { deleteProperyApi, deleteRoomApi, getAdminHotelsDetailsApi } from '../../../Services/allApi'
-import serverURL from '../../../Services/ServerURL'
+import serverURL from '../../../Services/serverURL'
 import { addResponseContext, addRoomResponseContext, deleteResponseContext, editHotelResponseContext, editRoomResponseContext } from '../../../context/ContextApi'
 import { toast } from 'react-toastify'
 import EditHotel from '../EditHotel'

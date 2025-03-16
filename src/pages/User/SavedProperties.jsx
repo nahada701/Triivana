@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import serverURL from '../../Services/ServerURL'
+import serverURL from '../../Services/serverURL'
 import UserNavbar from '../../components/User/UserNavbar'
 import { deleteUserSavedPropetyApi, getUserSavedPropetyApi } from '../../Services/allApi'
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Button, Badge } from "react-bootstrap";
-import serverURL from "../../Services/ServerURL";
+import serverURL from "../../Services/serverURL";
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from "react-router-dom";
 import { cancelBookingsApi } from "../../Services/allApi";
