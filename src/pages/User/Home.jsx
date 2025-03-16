@@ -39,7 +39,7 @@ function Home() {
 
   const { addResponse, setAddResponse } = useContext(addResponseContext)
 
-  const [selectedBtn,setSelectedBtn]=useState("Hotels")
+  const [selectedBtn,setSelectedBtn]=useState("All")
   const [state, setState] = useState([
     {
       startDate: new Date(),
