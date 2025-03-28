@@ -165,8 +165,6 @@ function AddHotel() {
             console.log(result.data);
 
             setHotelId(result.data._id);
-
-
             setStep(2)
           }
           else if (result.status == 406) {
@@ -255,7 +253,7 @@ function AddHotel() {
       };
 
       // Create an array of API call promises
-      const roomRequests = roomData.map(async (room) => {
+      const roomRequests = roomData?.map(async (room) => {
         const reqBody = new FormData();
         reqBody.append("hotelId", hotelId);
         reqBody.append("roomType", room.roomType);
@@ -272,7 +270,7 @@ function AddHotel() {
       // Wait for all API calls to complete
       const results = await Promise.all(roomRequests);
       console.log("API responses:", results);
-      if (results.map(result => result.status == 200)) {
+      if (results?.map(result => result.status == 200)) {
         toast.success("Rooms added successfully!");
         handleClose()
         setStep(1)
@@ -365,7 +363,7 @@ function AddHotel() {
               <div className="col-lg-6">
               <select value={hotelData.place} onChange={(e)=>setHotelData({...hotelData,place:e.target.value})} style={{ height:"55px", outline: "none" }} className="border mb-3 rounded w-100" name="" id="">
                   <option value="">Place</option>
-                  {cities.sort((a, b) => a.localeCompare(b)).map(city => (
+                  {cities.sort((a, b) => a.localeCompare(b))?.map(city => (
                     <option value={city}>{city}</option>
                   ))}
                 </select>
@@ -409,7 +407,7 @@ function AddHotel() {
                    "Spa", "Gym", "Swimming Pool", "Kids' Play Area",
                    "Live Entertainment", "Movie Theatre", "Airport Shuttle", "Car Rental",
                    "Eco-Friendly"
-                ].map((amenity, i) => (
+                ]?.map((amenity, i) => (
                   <Button
                     key={i}
                     variant={hotelData.amenities.includes(amenity) ? 'primary' : 'outline-secondary'}
@@ -446,7 +444,7 @@ function AddHotel() {
               </div>
 
               <div className='d-flex flex-wrap gap-2' >
-                {hotelData.images.map((image, index) => (
+                {hotelData.images?.map((image, index) => (
                   <div key={index} style={{ position: "relative" }}>
                     <img src={URL.createObjectURL(image)} alt=""
                       style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "5px" }}
@@ -544,7 +542,7 @@ function AddHotel() {
                      "Mini-Bar", "Refrigerator", "Coffee Maker", "Microwave", "Work Desk",
                      "Safe", "Wardrobe", "Blackout Curtains", "Ensuite Bathroom",
                      "Bathtub", "Rain Shower", "Toiletries", "Hair Dryer", "Digital Key"
-                      ].map((amenity, i) => (
+                      ]?.map((amenity, i) => (
                         <Button
                           key={i}
                           variant={room.amenities.includes(amenity) ? 'primary' : 'outline-secondary'}
@@ -580,7 +578,7 @@ function AddHotel() {
 
                     </div>
                     <div className='d-flex flex-wrap gap-2' >
-                      {roomData[index].images.map((image, imgIndex) => (
+                      {roomData[index]?.images?.map((image, imgIndex) => (
                         <div key={imgIndex} style={{ position: "relative" }}>
                           <img src={URL.createObjectURL(image)} alt=""
                             style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "5px" }}

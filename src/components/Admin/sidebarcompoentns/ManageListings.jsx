@@ -139,7 +139,7 @@ const handleEditProperty=async(id)=>{
      { 
      isLoading?<Spinner></Spinner>:
      hotelsWithRoomData?.length>0? 
-     hotelsWithRoomData.map(hotel=>(
+     hotelsWithRoomData?.map(hotel=>(
       <div className='shadow  mb-4 bg-light pb-3 p-5'>
         <div className='d-flex justify-content-between'>
           <h3>{hotel.propertyname}</h3>
@@ -161,7 +161,7 @@ const handleEditProperty=async(id)=>{
             </div>
        </div>
 <div className='col-md-6'>
-        {hotel.amenities.map(amenity => (
+        {hotel.amenities?.map(amenity => (
   <span style={{fontSize:"15px"}}  className='fw-bold mb-2 me-3 p-1' key={amenity}> <i className='fa-solid fa-check text-success'></i> {amenity}</span>
   
   ))}
@@ -196,7 +196,7 @@ hotel?.rooms?.map(room=>(
      <p style={{fontSize:"15px"}} >
        {room.description}
      </p>
-     {room.amenities.map(amenity => (
+     {room.amenities?.map(amenity => (
   <span style={{fontSize:"15px"}} className='fw-bold mb-2 me-3 p-1' key={amenity}> <i className='fa-solid fa-check text-success'></i> {amenity}</span>
 
     
