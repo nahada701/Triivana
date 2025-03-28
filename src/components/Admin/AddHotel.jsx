@@ -52,7 +52,7 @@ function AddHotel() {
       amenities: [],
       images: []
     })
-    setRoomData({
+    setRoomData([{
       roomType: '',
       numberOfRooms: '',
       occupancy:'',
@@ -60,7 +60,7 @@ function AddHotel() {
       description: "",
       amenities: [],
       images: []
-    })
+    }])
     setShow(false)
   };
   const handleShow = () => setShow(true);

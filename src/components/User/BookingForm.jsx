@@ -175,6 +175,7 @@ function BookingForm({isBookingConfirmed,setIsBookingConfirmed, hotel, room }) {
     if(userToken){
       setIsBooking(true)
       const reqBody = {
+        propertyname:hotel?.propertyname,
         properytype:hotel.properytype,
         roomType:room.roomType,
         name: bookingUserData.name,
