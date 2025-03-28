@@ -1,5 +1,4 @@
-const serverURL='http://localhost:3000'
+const serverURL='https://triivana-server.onrender.com'
 
-// https://triivana-server.onrender.com
 
 export default serverURL
